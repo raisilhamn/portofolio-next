@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { FontSizeControl } from "@/components/font-size-control";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -71,6 +72,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             &copy; {new Date().getFullYear()} Rais Ilham. Built with Next.js.
           </div>
         </footer>
+        <FontSizeControl />
       </body>
     </html>
   );
