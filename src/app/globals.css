@@ -5,8 +5,8 @@
   --color-bg: #ffffff;
   --color-bg-secondary: #fafafa;
   --color-fg: #171717;
-  --color-muted: #737373;
-  --color-muted-2: #a3a3a3;
+  --color-muted: #525252;
+  --color-muted-2: #737373;
   --color-border: #e5e5e5;
   --color-border-hover: #d4d4d4;
   --color-link: #2563eb;
@@ -55,6 +55,14 @@
 .dark .hljs-params { color: #e6e6e6; }
 .dark .hljs-meta { color: #8b949e; }
 .dark .hljs-link { color: #58a6ff; text-decoration: underline; }
+
+@keyframes blink-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.15; }
+}
+.blink-live {
+  animation: blink-dot 1.4s ease-in-out infinite;
+}
 
 html {
   scroll-behavior: smooth;

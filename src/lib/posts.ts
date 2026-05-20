@@ -13,10 +13,39 @@ export type PostMeta = {
   readingTime: string;
 };
 
+export type TocEntry = {
+  id: string;
+  text: string;
+  level: number;
+};
+
 function estimateReadingTime(content: string): string {
   const words = content.trim().split(/\s+/).length;
   const minutes = Math.max(1, Math.round(words / 200));
   return `${minutes} min read`;
+}
+
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+function extractHeadings(content: string): TocEntry[] {
+  const headingRegex = /^(#{2,3})\s+(.+)$/gm;
+  const entries: TocEntry[] = [];
+  let match;
+  while ((match = headingRegex.exec(content)) !== null) {
+    entries.push({
+      level: match[1].length,
+      text: match[2].trim(),
+      id: slugify(match[2].trim()),
+    });
+  }
+  return entries;
 }
 
 export function getAllPosts(): PostMeta[] {
@@ -44,6 +73,7 @@ export function getAllPosts(): PostMeta[] {
 export function getPostBySlug(slug: string): {
   content: string;
   meta: PostMeta;
+  headings: TocEntry[];
 } | null {
   const filePath = path.join(postsDir, `${slug}.md`);
   if (!fs.existsSync(filePath)) return null;
@@ -61,5 +91,6 @@ export function getPostBySlug(slug: string): {
       tags: data.tags || [],
       readingTime: estimateReadingTime(content),
     },
+    headings: extractHeadings(content),
   };
 }

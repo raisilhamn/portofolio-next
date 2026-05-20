@@ -4,8 +4,8 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Rais Ilham | Portfolio",
-  description: "Computer Science graduate. I build software, explore systems, and write about things I find interesting.",
+  title: "Rais Ilham Nustara | Portfolio",
+  description: "Software Engineer | Full-Stack Laravel & Next.js | TensorFlow Developer | Bangkit Mentor",
 };
 
 const nav = [
