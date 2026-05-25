@@ -63,6 +63,12 @@ const experiences = [
 
 const projects = [
   {
+    title: "Shortlink",
+    description: "URL shortener with click analytics — public links expire in 7 days, signed-in users get permanent links with full analytics (clicks by country, referrer, daily chart), admin panel for moderation. Built with Next.js 16, Drizzle ORM, Turso, and NextAuth. Live at s.raisilham.com.",
+    href: "https://github.com/raisilhamn/shortlink-next",
+    tags: ["Next.js", "Drizzle", "Turso", "NextAuth"],
+  },
+  {
     title: "DISC Personality Test",
     description: "Full-stack Next.js app for 24-question DISC personality assessment in Indonesian. Users select most/least like statements, get Dominance-Influence-Steadiness-Compliance scores with career recommendations. Includes UUID-based result lookup.",
     href: "https://disc.raisilham.com",
