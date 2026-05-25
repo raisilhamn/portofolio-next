@@ -60,6 +60,11 @@
   0%, 100% { opacity: 1; }
   50% { opacity: 0.15; }
 }
+.font-landing {
+  --font-sans: 'Inter', sans-serif;
+  font-family: 'Inter', sans-serif;
+}
+
 .blink-live {
   animation: blink-dot 1.4s ease-in-out infinite;
 }

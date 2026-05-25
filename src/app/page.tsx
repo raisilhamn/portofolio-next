@@ -117,7 +117,7 @@ export default function HomePage() {
 
 function HomeContent({ posts }: { posts: PostMeta[] }) {
   return (
-    <div>
+    <div className="font-landing">
       {/* Hero */}
       <section className="mb-16">
         <p className="font-sans text-xs text-[var(--color-muted-2)] uppercase tracking-widest mb-3">
@@ -270,7 +270,7 @@ function HomeContent({ posts }: { posts: PostMeta[] }) {
           {education.map((e) => (
             <div key={e.degree} className="border-b border-[var(--color-border)] pb-4">
               <div className="flex items-start justify-between gap-4">
-                <div>
+    <div className="font-landing">
                   <h3 className="font-sans text-sm font-medium">{e.degree}</h3>
                   <p className="text-xs text-[var(--color-muted)] mt-0.5">{e.school}</p>
                 </div>
