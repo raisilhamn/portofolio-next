@@ -75,6 +75,12 @@ const projects = [
     tags: ["Next.js", "Prisma", "Turso", "TypeScript"],
   },
   {
+    title: "InstaApp",
+    description: "Full-stack Instagram clone with Laravel + Inertia.js — user auth, posts, likes, comments, follows, explore feed, real-time notifications. Built with Laravel 11, Vue 3, Inertia.js, and Tailwind CSS.",
+    href: "https://github.com/raisilhamn/sevima-instaapp",
+    tags: ["PHP", "Laravel", "MySQL", "Vue.js", "Tailwind CSS", "Inertia.js"],
+  },
+  {
     title: "AutoEDA",
     description: "Automatic Exploratory Data Analysis web app — upload CSV, get comprehensive reports with dynamic visualizations, descriptive statistics, and quantitative analysis for continuous, categorical, and textual data.",
     href: "https://bit.ly/eda-rais",
