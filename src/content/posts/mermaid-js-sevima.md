@@ -1,21 +1,28 @@
 ---
-title: "Diagram as Code — Mermaid JS in Technical Planning"
-date: "2026-03-15"
-excerpt: "How we used Mermaid JS to streamline architecture discussions during development planning meetings at Sevima, and why diagram-as-code beats drag-and-drop tools every time."
-tags: ["tools", "visualization", "sevima", "workflow"]
+title: "Diagram as Code — Getting Started with Mermaid JS"
+date: "2026-05-28"
+excerpt: "Mermaid JS lets you create diagrams with plain text. Here is how it works, what you can build, and why diagram-as-code beats drag-and-drop tools."
+tags: ["tools", "visualization", "tutorial"]
 ---
 
-## Why Diagram as Code
+## What Is Mermaid JS?
 
-Every development team faces the same problem: architecture diagrams are always out of date. The Visio file sits on a shared drive from two years ago. The Draw.io diagram lives on someone's local machine. By the time a new engineer joins, the diagram bears no resemblance to the actual system.
+Mermaid JS is a JavaScript library that renders diagrams from Markdown-like text definitions. Instead of dragging boxes and arrows in a GUI tool, you write:
 
-**Mermaid JS** solves this by treating diagrams as code — version-controlled, reviewable, and generated from a Markdown-like syntax.
+```
+flowchart LR
+    A --> B
+```
+
+And Mermaid turns it into an SVG diagram. The diagram lives alongside your code, under version control, reviewable in pull requests.
 
 ---
 
-## A Real Example: URL Shortener Resolution Flow
+## The Syntax
 
-During a technical planning meeting at Sevima, we needed to design the link resolution pipeline for a URL shortener feature. The CTO wanted to see every edge case — expired links, suspended content, alias resolution — in a single diagram. Instead of reaching for a GUI tool, I wrote this in real-time:
+### Flowcharts
+
+Flowcharts connect nodes with edges. Nodes can be rectangles, rounded boxes, diamonds (decisions), or circles (start/end):
 
 ```mermaid
 flowchart TD
@@ -49,48 +56,91 @@ flowchart TD
     Disclaimer -->|"Report this link"| ReportFlow["Go to /report"]
 ```
 
-The diagram captures the full decision tree: slug lookup, alias fallback, status checks, analytics collection, and the final redirect path. Every conditional branch is explicit — nothing is hidden in implicit logic.
+Notice the syntax: `Node -->|"edge label"| OtherNode`. The direction is set by `TD` (top-down), `LR` (left-right), or `BT` (bottom-top). Use `[]` for rectangles, `{}` for diamonds, `()` for rounded nodes, and `([...])` for stadium-shaped nodes.
+
+### Sequence Diagrams
+
+Great for API call flows between services:
+
+```
+sequenceDiagram
+    Alice->>John: Hello John, how are you?
+    John-->>Alice: Great!
+```
+
+### Class Diagrams
+
+Model domain objects and their relationships:
+
+```
+classDiagram
+    class Animal {
+        +String name
+        +move()
+    }
+    class Dog {
+        +bark()
+    }
+    Animal <|-- Dog
+```
+
+### Entity-Relationship Diagrams
+
+Visualize database schemas:
+
+```
+erDiagram
+    USER ||--o{ ORDER : places
+    ORDER ||--|{ LINE_ITEM : contains
+```
+
+### State Diagrams
+
+Track state transitions:
+
+```
+stateDiagram-v2
+    [*] --> Idle
+    Idle --> Processing : submit
+    Processing --> Completed : done
+    Processing --> Idle : reset
+```
+
+### Gantt Charts
+
+Sprint timelines and project planning:
+
+```
+gantt
+    title Sprint 1
+    dateFormat  YYYY-MM-DD
+    section Backend
+    Auth API        :done, a1, 2026-03-01, 3d
+    Payment module  :active, a2, 2026-03-04, 5d
+```
 
 ---
 
-## How We Used It in Sevima Dev Planning
+## How to Use Mermaid
 
-In Sevima's development planning process, the CTO held weekly technical meetings where feature squads presented their architecture proposals. The format was straightforward:
+Three common approaches:
 
-1. **The squad lead opens a Markdown file** with embedded Mermaid diagrams
-2. **Diagrams are projected** during the meeting and reviewed line-by-line
-3. **The CTO marks concerns** directly on specific nodes or edges
-4. **Changes are committed** to the proposal branch before the meeting ends
+1. **In-browser rendering** — include the Mermaid CDN script. Any `<pre class="mermaid">` block on the page is automatically rendered.
+2. **Markdown integration** — platforms like GitHub, GitLab, and Notion render ` ```mermaid ` blocks natively. Just paste the code and the diagram appears.
+3. **CLI tool** — `npx @mermaid-js/mermaid-cli` converts `.mmd` files to PNG/SVG for use in documents or presentations.
 
-This replaced our old flow where someone would spend two hours in a GUI tool, export a PNG, and then the diagram would immediately drift as the implementation diverged.
-
-### Why It Worked
-
-- **Version control** — every diagram change has a git history. We could see when and why a decision node was added or removed.
-- **Reviewable diffs** — a Mermaid diff is text. Changing a node label or adding an edge shows up clearly in a PR.
-- **No lock-in** — Mermaid files are plain text. They work in GitHub, GitLab, Notion, and any Markdown renderer.
-- **Speed** — writing `A --> B{"Condition"} -->|"edge"| C` is faster than dragging boxes and arrows.
+In this blog, Mermaid code blocks are rendered live using the Mermaid JS library — what you see above is generated directly from the source text.
 
 ---
 
-## The Impact
+## Why Diagram as Code
 
-The technical planning process became more rigorous. Diagrams that were once vaguely descriptive became executable specifications. The CTO could ask "what happens when the slug is an alias *and* the resolved link is expired?" and we could trace the exact path through the diagram rather than guessing.
-
-The URL shortener itself went from concept to production in two sprints. The Mermaid diagram served as the single source of truth throughout implementation — engineers referenced it during coding, QA used it to design test cases, and the tech writer used it for documentation.
-
----
-
-## Beyond Flowcharts
-
-Mermaid supports many diagram types we used regularly:
-
-- **Sequence diagrams** for API call flows between microservices
-- **Class diagrams** for domain model discussions
-- **Entity-relationship diagrams** for database schema reviews
-- **State diagrams** for order lifecycle tracking
-- **Gantt charts** for sprint planning
+- **Version control** — every diagram change has a git history. You can see when and why a node was added or removed.
+- **Reviewable diffs** — a Mermaid diff is plain text. Changing a label or adding an edge shows up clearly in a pull request.
+- **No lock-in** — Mermaid files work in GitHub, GitLab, Notion, and any Markdown renderer.
+- **Speed** — writing `A --> B{"Condition"} -->|"edge"| C` takes seconds. No GUI tool can match that.
+- **Documentation stays in sync** — the diagram lives in the same repo as the code. When the code changes, the diagram changes in the same PR.
 
 ---
 
-Mermaid JS turned diagrams from artifacts we tolerated into tools we used. If your team still draws architecture in a GUI tool and exports PNGs, try embedding Mermaid in your next design doc. The diff alone is worth the switch.
+Mermaid JS turns diagrams from artifacts you tolerate into tools you actually use. Pick a diagram type, write the syntax, and commit it alongside your code.
