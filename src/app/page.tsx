@@ -332,7 +332,7 @@ function HomeContent({ posts }: { posts: PostMeta[] }) {
               <p className="text-sm font-medium font-sans">TOEFL ITP</p>
               <p className="text-xs text-[var(--color-muted)]">Score 577 &mdash; Reading 65 (C1), Listening 62 (C1)</p>
             </div>
-            <span className="font-mono text-xs text-[var(--color-muted-2)] shrink-0">2024</span>
+            <span className="font-mono text-xs text-[var(--color-muted-2)] shrink-0">2026</span>
           </div>
         </div>
       </section>

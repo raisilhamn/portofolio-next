@@ -5,6 +5,7 @@ import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeHighlight from "rehype-highlight";
 import type { Components } from "react-markdown";
 import { CopyButton } from "@/components/copy-button";
+import { MermaidBlock } from "@/components/mermaid-block";
 
 const components: Components = {
   h2: ({ children, ...props }) => (
@@ -20,6 +21,11 @@ const components: Components = {
   pre: ({ children, ...props }: React.HTMLAttributes<HTMLPreElement>) => {
     const codeEl = children as any;
     const code = codeEl?.props?.children?.toString() ?? "";
+    const className = codeEl?.props?.className ?? "";
+
+    if (className.includes("language-mermaid")) {
+      return <MermaidBlock code={code} />;
+    }
 
     return (
       <div className="relative group">
