@@ -1,13 +1,43 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { FontSizeControl } from "@/components/font-size-control";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
+import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from "@/lib/constants";
 
 export const metadata: Metadata = {
-  title: "Rais Ilham Nustara | Portfolio",
-  description: "Software Engineer | Full-Stack Laravel & Next.js | TensorFlow Developer | Bangkit Mentor",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: `${SITE_NAME} | Portfolio`,
+    template: `%s | ${SITE_NAME}`,
+  },
+  description: SITE_DESCRIPTION,
+  openGraph: {
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  alternates: {
+    canonical: SITE_URL,
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 const nav = [

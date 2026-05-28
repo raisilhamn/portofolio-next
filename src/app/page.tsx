@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getAllPosts } from "@/lib/posts";
 import type { PostMeta } from "@/lib/posts";
+import { SITE_URL } from "@/lib/constants";
 
 const socialLinks = [
   { label: "Email", href: "mailto:kerja@raisilham.com", icon: "M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z" },
@@ -124,6 +125,28 @@ export default function HomePage() {
 function HomeContent({ posts }: { posts: PostMeta[] }) {
   return (
     <div className="font-landing">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Person",
+            name: "Rais Ilham Nustara",
+            url: SITE_URL,
+            email: "kerja@raisilham.com",
+            jobTitle: "Software Engineer",
+            alumniOf: ["Universitas Airlangga", "Bangkit Academy"],
+            knowsAbout: [
+              "Laravel", "Next.js", "React", "TypeScript", "Python",
+              "TensorFlow", "Machine Learning", "PostgreSQL", "Docker",
+            ],
+            sameAs: [
+              "https://github.com/raisilhamn",
+              "https://linkedin.com/in/raisilhamn",
+            ],
+          }),
+        }}
+      />
       {/* Hero */}
       <section className="mb-16">
         <p className="font-sans text-xs text-[var(--color-muted-2)] uppercase tracking-widest mb-3">

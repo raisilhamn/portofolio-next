@@ -1,5 +1,20 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { getAllPosts } from "@/lib/posts";
+import { SITE_NAME } from "@/lib/constants";
+
+export const metadata: Metadata = {
+  title: "Blog",
+  description: "Writing about software engineering, system design, tools, and things I learn along the way.",
+  openGraph: {
+    title: `Blog | ${SITE_NAME}`,
+    description: "Writing about software engineering, system design, tools, and things I learn along the way.",
+  },
+  twitter: {
+    title: `Blog | ${SITE_NAME}`,
+    description: "Writing about software engineering, system design, tools, and things I learn along the way.",
+  },
+};
 
 export default function BlogPage() {
   const posts = getAllPosts();
