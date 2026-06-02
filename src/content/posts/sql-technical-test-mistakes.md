@@ -388,23 +388,255 @@ Common trap: `DELETE` (DML) removes rows; `DROP` (DDL) removes entire tables. `T
 
 These define and modify the **structure** of database objects.
 
-| Keyword | Purpose | Example |
-|---------|---------|---------|
-| `CREATE` | Create a new table, view, index, or database | `CREATE TABLE foo (id INT);` |
-| `ALTER` | Modify an existing object's structure | `ALTER TABLE foo ADD COLUMN bar VARCHAR(10);` |
-| `DROP` | Delete an object entirely | `DROP TABLE foo;` |
-| `TRUNCATE` | Delete all rows from a table (faster than DELETE, cannot rollback in some DBs) | `TRUNCATE TABLE foo;` |
+**`CREATE`**
+
+```sql
+-- 1. Create a basic table
+CREATE TABLE customer (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    city VARCHAR(50),
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- 2. Create a table with foreign key
+CREATE TABLE invoice (
+    id SERIAL PRIMARY KEY,
+    customer_id INT REFERENCES customer(id),
+    total DECIMAL(12, 2),
+    date DATE NOT NULL
+);
+
+-- 3. Create a view
+CREATE VIEW customer_summary AS
+SELECT c.name, c.city, COUNT(i.id) AS invoice_count, SUM(i.total) AS total_spent
+FROM customer c
+LEFT JOIN invoice i ON c.id = i.customer_id
+GROUP BY c.id, c.name, c.city;
+
+-- 4. Create an index
+CREATE INDEX idx_invoice_customer ON invoice(customer_id);
+CREATE INDEX idx_invoice_date ON invoice(date);
+
+-- 5. Create a database (requires superuser)
+CREATE DATABASE sales_db OWNER app_user ENCODING 'UTF8';
+```
+
+**`ALTER`**
+
+```sql
+-- 1. Add a column
+ALTER TABLE customer ADD COLUMN phone VARCHAR(20);
+
+-- 2. Drop a column
+ALTER TABLE customer DROP COLUMN phone;
+
+-- 3. Rename a column
+ALTER TABLE customer RENAME COLUMN city TO kota;
+
+-- 4. Change a column's data type
+ALTER TABLE customer ALTER COLUMN name TYPE VARCHAR(200);
+
+-- 5. Add a constraint
+ALTER TABLE invoice ADD CONSTRAINT fk_customer
+    FOREIGN KEY (customer_id) REFERENCES customer(id) ON DELETE CASCADE;
+
+-- 6. Add a default value
+ALTER TABLE invoice ALTER COLUMN total SET DEFAULT 0;
+```
+
+**`DROP`**
+
+```sql
+-- 1. Drop a table
+DROP TABLE invoice;
+
+-- 2. Drop if exists (safe, no error if table is missing)
+DROP TABLE IF EXISTS invoice;
+
+-- 3. Drop with CASCADE (remove dependent objects too)
+DROP TABLE customer CASCADE;
+
+-- 4. Drop a view
+DROP VIEW IF EXISTS customer_summary;
+
+-- 5. Drop an index
+DROP INDEX IF EXISTS idx_invoice_date;
+
+-- 6. Drop a database (outside any transaction, requires superuser)
+DROP DATABASE IF EXISTS sales_db;
+```
+
+**`TRUNCATE`**
+
+```sql
+-- 1. Remove all rows fast (DDL — cannot rollback in PostgreSQL without a transaction)
+TRUNCATE TABLE invoice;
+
+-- 2. Truncate multiple tables
+TRUNCATE TABLE invoice, customer;
+
+-- 3. Truncate and reset identity sequences
+TRUNCATE TABLE invoice RESTART IDENTITY;
+
+-- 4. Truncate with CASCADE (also truncate referencing tables)
+TRUNCATE TABLE customer CASCADE;
+
+-- 5. Safe truncate inside a transaction (PostgreSQL — allows rollback)
+BEGIN;
+TRUNCATE TABLE invoice;
+-- Oops, wrong table!
+ROLLBACK;  -- rows are restored
+```
 
 ### DML — Data Manipulation Language
 
 These operate on the **data** inside tables.
 
-| Keyword | Purpose | Example |
-|---------|---------|---------|
-| `SELECT` | Retrieve rows | `SELECT * FROM foo;` |
-| `INSERT` | Add new rows | `INSERT INTO foo VALUES (1, 'a');` |
-| `UPDATE` | Modify existing rows | `UPDATE foo SET name = 'b' WHERE id = 1;` |
-| `DELETE` | Remove rows | `DELETE FROM foo WHERE id = 1;` |
+**`SELECT`**
+
+```sql
+-- 1. Select all columns
+SELECT * FROM customer;
+
+-- 2. Select specific columns with alias
+SELECT name AS nama, city AS kota FROM customer;
+
+-- 3. Select with WHERE filter
+SELECT * FROM invoice WHERE total > 50000 AND date >= '2026-01-01';
+
+-- 4. Select with GROUP BY and aggregate
+SELECT customer_id, COUNT(*) AS total, SUM(total) AS revenue
+FROM invoice
+GROUP BY customer_id;
+
+-- 5. Select with GROUP BY + HAVING
+SELECT customer_id, SUM(total) AS revenue
+FROM invoice
+GROUP BY customer_id
+HAVING SUM(total) > 100000;
+
+-- 6. Select with ORDER BY (ASC/DESC)
+SELECT * FROM invoice ORDER BY total DESC, date ASC;
+
+-- 7. Select with LIMIT and OFFSET
+SELECT * FROM invoice ORDER BY date DESC LIMIT 10 OFFSET 20;
+
+-- 8. Select DISTINCT values
+SELECT DISTINCT city FROM customer;
+
+-- 9. Select with subquery in WHERE
+SELECT name FROM customer
+WHERE id IN (SELECT customer_id FROM invoice WHERE total > 500000);
+
+-- 10. Select with EXISTS
+SELECT name FROM customer c
+WHERE EXISTS (SELECT 1 FROM invoice i WHERE i.customer_id = c.id AND i.total > 500000);
+
+-- 11. Select with CASE expression
+SELECT name, total,
+    CASE
+        WHEN total > 500000 THEN 'Large'
+        WHEN total > 100000 THEN 'Medium'
+        ELSE 'Small'
+    END AS category
+FROM invoice;
+
+-- 12. Select with window function
+SELECT name, date, total,
+    SUM(total) OVER (PARTITION BY customer_id ORDER BY date) AS running_total
+FROM invoice
+JOIN customer ON customer.id = invoice.customer_id;
+```
+
+**`INSERT`**
+
+```sql
+-- 1. Insert a single row (all columns in order)
+INSERT INTO customer VALUES (1, 'Toko Aling', 'JKT');
+
+-- 2. Insert with explicit column list (preferred)
+INSERT INTO customer (name, city) VALUES ('Toko Aling', 'JKT');
+
+-- 3. Insert multiple rows in one statement
+INSERT INTO customer (name, city) VALUES
+    ('Toko Aling', 'JKT'),
+    ('Tk. Noer', 'BDG'),
+    ('Tk. Tari', 'YOG');
+
+-- 4. INSERT ... SELECT (copy rows from another table)
+INSERT INTO customer_archive (id, name, city)
+SELECT id, name, city FROM customer WHERE created_at < '2020-01-01';
+
+-- 5. INSERT with RETURNING (PostgreSQL — get back generated values)
+INSERT INTO customer (name, city)
+VALUES ('Ap. Sehat', 'JKT')
+RETURNING id, created_at;
+
+-- 6. INSERT ... ON CONFLICT (PostgreSQL upsert)
+INSERT INTO customer (id, name, city)
+VALUES (1, 'Toko Aling Updated', 'BDG')
+ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name, city = EXCLUDED.city;
+```
+
+**`UPDATE`**
+
+```sql
+-- 1. Update a single column
+UPDATE customer SET city = 'BDG' WHERE id = 1;
+
+-- 2. Update multiple columns
+UPDATE customer SET name = 'Toko Aling Baru', city = 'JKT' WHERE id = 1;
+
+-- 3. Update with calculation
+UPDATE invoice SET total = total * 1.1 WHERE date < '2020-01-01';
+
+-- 4. Update using a subquery
+UPDATE invoice SET total = 0
+WHERE customer_id IN (SELECT id FROM customer WHERE city = 'JKT');
+
+-- 5. Update with JOIN (PostgreSQL: UPDATE ... FROM)
+UPDATE invoice i
+SET total = i.total * 0.9
+FROM customer c
+WHERE i.customer_id = c.id AND c.city = 'YOG';
+
+-- 6. Update with RETURNING
+UPDATE invoice SET total = total * 1.05
+WHERE date >= '2026-01-01'
+RETURNING id, customer_id, total AS new_total;
+
+-- 7. Update all rows (no WHERE — be careful!)
+UPDATE invoice SET total = 0;
+```
+
+**`DELETE`**
+
+```sql
+-- 1. Delete a specific row
+DELETE FROM customer WHERE id = 1;
+
+-- 2. Delete with subquery condition
+DELETE FROM invoice
+WHERE customer_id IN (SELECT id FROM customer WHERE city = 'BDG');
+
+-- 3. Delete with JOIN (PostgreSQL: DELETE ... USING)
+DELETE FROM invoice i
+USING customer c
+WHERE i.customer_id = c.id AND c.city = 'YOG';
+
+-- 4. Delete all rows (keep table structure)
+DELETE FROM invoice;
+
+-- 5. Delete with RETURNING
+DELETE FROM customer
+WHERE city = 'JKT'
+RETURNING id, name;
+
+-- 6. Delete based on NOT EXISTS (cleanup orphans)
+DELETE FROM customer c
+WHERE NOT EXISTS (SELECT 1 FROM invoice i WHERE i.customer_id = c.id);
+```
 
 ### DCL — Data Control Language
 
