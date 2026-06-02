@@ -8,7 +8,7 @@ tags: ["sql", "interviews", "database", "learning"]
 ## The DBeaver Autocomplete Trap
 
 I've been writing SQL in DBeaver for years. The autocomplete help me a lot in my previous job. I stop memorizing and start just... clicking.
-Then I had a job interview with a live coding test. No autocomplete. A docs editor, a question on screen, and someone watching me.
+Then I had a job interview with a live coding test. No autocomplete. A docs editor, a question on screen, and 5 people watching me.
 My hands went cold. I started a query and immediately hit a wall. I sat there staring at it. I knew what the query needed to do. I just couldn't get my fingers to type it out without DBeaver holding my hand. I rushed, second-guessed myself, rewrote the same line three times. 
 
 So this is my post-mortem. 
