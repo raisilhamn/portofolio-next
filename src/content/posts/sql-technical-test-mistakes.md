@@ -1,7 +1,7 @@
 ---
 title: "SQL Technical Test: Mistakes, Lessons, and What I Relearned"
 date: "2026-06-02"
-excerpt: "After bombing a live SQL technical test — thanks to DBeaver's autocomplete addiction — I go back to fundamentals: order of execution, JOINs, every SQL keyword, and a full practice test with answers."
+excerpt: "After bombing a live SQL technical test: thanks to DBeaver's autocomplete addiction: I go back to fundamentals: order of execution, JOINs, every SQL keyword, and a full practice test with answers."
 tags: ["sql", "interviews", "database", "learning"]
 ---
 
@@ -77,7 +77,7 @@ Table A: {1, 2, 3}    Table B: {2, 3, 4}
 A INNER JOIN B => {2, 3}
 ```
 
-**Example 1 — Basic two-table join:**
+**Example 1: Basic two-table join**
 
 ```sql
 SELECT customer.name, invoice.total
@@ -85,7 +85,7 @@ FROM customer
 INNER JOIN invoice ON customer.id = invoice.customer_id;
 ```
 
-**Example 2 — Three-table join:**
+**Example 2: Three-table join**
 
 ```sql
 SELECT c.name, i.total, p.name AS product
@@ -94,7 +94,7 @@ INNER JOIN invoice i ON c.id = i.customer_id
 INNER JOIN product p ON i.product_id = p.id;
 ```
 
-**Example 3 — Join with WHERE filter:**
+**Example 3: Join with WHERE filter**
 
 ```sql
 SELECT c.name, i.total, i.date
@@ -103,7 +103,7 @@ INNER JOIN invoice i ON c.id = i.customer_id
 WHERE i.total > 100000 AND c.city = 'JKT';
 ```
 
-**Example 4 — Join with GROUP BY and aggregate:**
+**Example 4: Join with GROUP BY and aggregate**
 
 ```sql
 SELECT c.name, COUNT(i.id) AS total_invoices, SUM(i.total) AS total_spent
@@ -112,7 +112,7 @@ INNER JOIN invoice i ON c.id = i.customer_id
 GROUP BY c.name;
 ```
 
-**Example 5 — Self-join (join a table to itself):**
+**Example 5: Self-join (join a table to itself)**
 
 ```sql
 SELECT e.name AS employee, m.name AS manager
@@ -130,7 +130,7 @@ Returns **all rows from the left table** plus matching rows from the right table
 A LEFT JOIN B => {(1, null), (2, 2), (3, 3)}
 ```
 
-**Example 1 — Basic left join:**
+**Example 1: Basic left join**
 
 ```sql
 SELECT customer.name, invoice.total
@@ -139,7 +139,7 @@ LEFT JOIN invoice ON customer.id = invoice.customer_id;
 -- Shows ALL customers, even those with no invoices
 ```
 
-**Example 2 — Find customers with NO invoices (anti-join pattern):**
+**Example 2: Find customers with NO invoices (anti-join pattern)**
 
 ```sql
 SELECT customer.name
@@ -148,7 +148,7 @@ LEFT JOIN invoice ON customer.id = invoice.customer_id
 WHERE invoice.id IS NULL;
 ```
 
-**Example 3 — LEFT JOIN with aggregation:**
+**Example 3: LEFT JOIN with aggregation**
 
 ```sql
 SELECT c.name, COALESCE(SUM(i.total), 0) AS total_spent
@@ -158,7 +158,7 @@ GROUP BY c.name;
 -- COALESCE turns NULL sums into 0 for customers with no purchases
 ```
 
-**Example 4 — Multiple LEFT JOINs chained:**
+**Example 4: Multiple LEFT JOINs chained**
 
 ```sql
 SELECT c.name, i.total, p.name AS product, s.name AS shipper
@@ -168,7 +168,7 @@ LEFT JOIN product p ON i.product_id = p.id
 LEFT JOIN shipment s ON i.id = s.invoice_id;
 ```
 
-**Example 5 — LEFT JOIN vs INNER JOIN side-by-side:**
+**Example 5: LEFT JOIN vs INNER JOIN side-by-side**
 
 ```sql
 -- INNER: only customers who bought something
@@ -182,9 +182,9 @@ SELECT c.name FROM customer c LEFT JOIN invoice i ON c.id = i.customer_id;
 
 ### RIGHT JOIN (RIGHT OUTER JOIN)
 
-Same as LEFT JOIN but reversed — all rows from the right table.
+Same as LEFT JOIN but reversed: all rows from the right table.
 
-**Example 1 — Basic right join:**
+**Example 1: Basic right join**
 
 ```sql
 SELECT customer.name, invoice.total
@@ -193,7 +193,7 @@ RIGHT JOIN invoice ON customer.id = invoice.customer_id;
 -- Shows ALL invoices, even orphaned ones
 ```
 
-**Example 2 — Find orphaned invoices (no matching customer):**
+**Example 2: Find orphaned invoices (no matching customer)**
 
 ```sql
 SELECT invoice.id, invoice.total
@@ -202,7 +202,7 @@ RIGHT JOIN invoice ON customer.id = invoice.customer_id
 WHERE customer.id IS NULL;
 ```
 
-**Example 3 — RIGHT JOIN with filter on left table:**
+**Example 3: RIGHT JOIN with filter on left table**
 
 ```sql
 SELECT c.name, i.total
@@ -211,7 +211,7 @@ RIGHT JOIN invoice i ON c.id = i.customer_id
 WHERE i.date >= '2026-01-01';
 ```
 
-**Example 4 — Three-table RIGHT JOIN chain:**
+**Example 4: Three-table RIGHT JOIN chain**
 
 ```sql
 SELECT s.name AS supplier, p.name AS product, i.total
@@ -220,7 +220,7 @@ RIGHT JOIN product p ON s.id = p.supplier_id
 RIGHT JOIN invoice i ON p.id = i.product_id;
 ```
 
-**Example 5 — Rewriting RIGHT JOIN as LEFT JOIN (preferred style):**
+**Example 5: Rewriting RIGHT JOIN as LEFT JOIN (preferred style)**
 
 ```sql
 -- RIGHT JOIN (less common, harder to read)
@@ -240,7 +240,7 @@ Returns all rows from both tables. Unmatched sides become `NULL`.
 A FULL OUTER JOIN B => {(1, null), (2, 2), (3, 3), (null, 4)}
 ```
 
-**Example 1 — Basic full outer join:**
+**Example 1: Basic full outer join**
 
 ```sql
 SELECT c.name, i.total
@@ -248,7 +248,7 @@ FROM customer c
 FULL OUTER JOIN invoice i ON c.id = i.customer_id;
 ```
 
-**Example 2 — Find mismatches on BOTH sides:**
+**Example 2: Find mismatches on BOTH sides**
 
 ```sql
 SELECT c.name, i.id AS invoice_id
@@ -258,7 +258,7 @@ WHERE c.id IS NULL OR i.id IS NULL;
 -- Shows customers without invoices AND invoices without customers
 ```
 
-**Example 3 — FULL OUTER with COALESCE for cleaner output:**
+**Example 3: FULL OUTER with COALESCE for cleaner output**
 
 ```sql
 SELECT
@@ -268,7 +268,7 @@ FROM customer c
 FULL OUTER JOIN invoice i ON c.id = i.customer_id;
 ```
 
-**Example 4 — FULL OUTER joining three tables (PostgreSQL):**
+**Example 4: FULL OUTER joining three tables (PostgreSQL)**
 
 ```sql
 SELECT COALESCE(c.name, '?') AS customer,
@@ -279,7 +279,7 @@ FULL OUTER JOIN invoice i ON c.id = i.customer_id
 FULL OUTER JOIN product p ON i.product_id = p.id;
 ```
 
-**Example 5 — FULL OUTER vs UNION ALL simulation (for databases without FULL OUTER):**
+**Example 5: FULL OUTER vs UNION ALL simulation (for databases without FULL OUTER)**
 
 ```sql
 -- MySQL workaround: simulate FULL OUTER JOIN with UNION
@@ -294,14 +294,14 @@ SELECT c.name, i.total FROM customer c RIGHT JOIN invoice i ON c.id = i.customer
 
 Cartesian product: every row from the left paired with every row from the right. Rarely what you want.
 
-**Example 1 — Basic cross join:**
+**Example 1: Basic cross join**
 
 ```sql
 SELECT * FROM colors CROSS JOIN sizes;
 -- 5 colors × 3 sizes = 15 rows
 ```
 
-**Example 2 — Cross join with WHERE to simulate INNER JOIN (old-style):**
+**Example 2: Cross join with WHERE to simulate INNER JOIN (old-style)**
 
 ```sql
 SELECT c.name, i.total
@@ -311,17 +311,17 @@ WHERE c.id = i.customer_id;
 -- Functionally identical to INNER JOIN, but less readable
 ```
 
-**Example 3 — Generate a number series (useful trick):**
+**Example 3: Generate a number series (useful trick)**
 
 ```sql
 SELECT a.n * 10 + b.n AS number
 FROM (VALUES (0),(1),(2),(3),(4),(5),(6),(7),(8),(9)) AS a(n)
 CROSS JOIN (VALUES (0),(1),(2),(3),(4),(5),(6),(7),(8),(9)) AS b(n)
 ORDER BY number;
--- Generates numbers 0–99
+-- Generates numbers 0-99
 ```
 
-**Example 4 — Cross join to fill missing combinations:**
+**Example 4: Cross join to fill missing combinations**
 
 ```sql
 SELECT d.date, p.name AS product
@@ -331,7 +331,7 @@ ORDER BY d.date, p.name;
 -- All possible date/product pairs, even those with no sales
 ```
 
-**Example 5 — Cross join with LATERAL (PostgreSQL):**
+**Example 5: Cross join with LATERAL (PostgreSQL)**
 
 ```sql
 SELECT c.name, top_sales.total
@@ -347,14 +347,14 @@ CROSS JOIN LATERAL (
 
 ### What Does a Bare `JOIN` Do?
 
-Writing just `JOIN` without any qualifier — e.g. `FROM a JOIN b ON a.id = b.id` — defaults to **`INNER JOIN`** in PostgreSQL (and in MySQL, SQLite, and SQL Server). These two are identical:
+Writing just `JOIN` without any qualifier: e.g. `FROM a JOIN b ON a.id = b.id`: defaults to **`INNER JOIN`** in PostgreSQL (and in MySQL, SQLite, and SQL Server). These two are identical:
 
 ```sql
 SELECT * FROM customer JOIN invoice ON customer.id = invoice.customer_id;
 SELECT * FROM customer INNER JOIN invoice ON customer.id = invoice.customer_id;
 ```
 
-This is true in the SQL standard as well: `JOIN` is shorthand for `INNER JOIN`. However, you cannot write just `INNER` without `JOIN` — `FROM a INNER b ON ...` is a syntax error.
+This is true in the SQL standard as well: `JOIN` is shorthand for `INNER JOIN`. However, you cannot write just `INNER` without `JOIN`: `FROM a INNER b ON ...` is a syntax error.
 
 Because the bare `JOIN` is ambiguous to read (does the author mean INNER? did they forget LEFT?), most style guides recommend always writing the full keyword: `INNER JOIN`, `LEFT JOIN`, etc.
 
@@ -384,7 +384,7 @@ A quick way to keep them straight:
 
 Common trap: `DELETE` (DML) removes rows; `DROP` (DDL) removes entire tables. `TRUNCATE` (DDL) removes all rows quickly but cannot be rolled back in some databases.
 
-### DDL — Data Definition Language
+### DDL: Data Definition Language
 
 These define and modify the **structure** of database objects.
 
@@ -470,7 +470,7 @@ DROP DATABASE IF EXISTS sales_db;
 **`TRUNCATE`**
 
 ```sql
--- 1. Remove all rows fast (DDL — cannot rollback in PostgreSQL without a transaction)
+-- 1. Remove all rows fast (DDL: cannot rollback in PostgreSQL without a transaction)
 TRUNCATE TABLE invoice;
 
 -- 2. Truncate multiple tables
@@ -482,14 +482,14 @@ TRUNCATE TABLE invoice RESTART IDENTITY;
 -- 4. Truncate with CASCADE (also truncate referencing tables)
 TRUNCATE TABLE customer CASCADE;
 
--- 5. Safe truncate inside a transaction (PostgreSQL — allows rollback)
+-- 5. Safe truncate inside a transaction (PostgreSQL: allows rollback)
 BEGIN;
 TRUNCATE TABLE invoice;
 -- Oops, wrong table!
 ROLLBACK;  -- rows are restored
 ```
 
-### DML — Data Manipulation Language
+### DML: Data Manipulation Language
 
 These operate on the **data** inside tables.
 
@@ -568,7 +568,7 @@ INSERT INTO customer (name, city) VALUES
 INSERT INTO customer_archive (id, name, city)
 SELECT id, name, city FROM customer WHERE created_at < '2020-01-01';
 
--- 5. INSERT with RETURNING (PostgreSQL — get back generated values)
+-- 5. INSERT with RETURNING (PostgreSQL: get back generated values)
 INSERT INTO customer (name, city)
 VALUES ('Ap. Sehat', 'JKT')
 RETURNING id, created_at;
@@ -606,7 +606,7 @@ UPDATE invoice SET total = total * 1.05
 WHERE date >= '2026-01-01'
 RETURNING id, customer_id, total AS new_total;
 
--- 7. Update all rows (no WHERE — be careful!)
+-- 7. Update all rows (no WHERE: be careful!)
 UPDATE invoice SET total = 0;
 ```
 
@@ -638,14 +638,14 @@ DELETE FROM customer c
 WHERE NOT EXISTS (SELECT 1 FROM invoice i WHERE i.customer_id = c.id);
 ```
 
-### DCL — Data Control Language
+### DCL: Data Control Language
 
 | Keyword | Purpose |
 |---------|---------|
 | `GRANT` | Give privileges to users |
 | `REVOKE` | Remove privileges from users |
 
-### TCL — Transaction Control Language
+### TCL: Transaction Control Language
 
 | Keyword | Purpose |
 |---------|---------|
@@ -828,7 +828,7 @@ WHERE id IN (SELECT customer_id FROM invoice WHERE date >= '2026-01-01');
 SELECT name FROM customer
 WHERE id = (SELECT MAX(customer_id) FROM invoice);
 
--- Subquery in SELECT (scalar subquery — one row, one column)
+-- Subquery in SELECT (scalar subquery: one row, one column)
 SELECT name,
     (SELECT COUNT(*) FROM invoice WHERE customer_id = customer.id) AS order_count
 FROM customer;
@@ -858,7 +858,7 @@ Here is what went wrong, categorized honestly:
 
 ### 1. Forgetting `CREATE TABLE` Syntax
 
-I wrote something like `CREATE TABLE Customer VALUES (...)` — mixing the syntax of `CREATE TABLE` with `INSERT INTO`. The correct syntax is:
+I wrote something like `CREATE TABLE Customer VALUES (...)`: mixing the syntax of `CREATE TABLE` with `INSERT INTO`. The correct syntax is:
 
 ```sql
 CREATE TABLE Customer (
@@ -901,7 +901,7 @@ I wrote `TglFaktur '11/5/2020 - 12/5/2020'` instead of `TglFaktur BETWEEN '11/5/
 
 ### 6. String Comparison in `WHERE` Without Quotes
 
-I wrote `WHERE KdCust = Tk. Tari` — no quotes around the string value. Strings must always be quoted:
+I wrote `WHERE KdCust = Tk. Tari`: no quotes around the string value. Strings must always be quoted:
 
 ```sql
 WHERE NmCust = 'Tk. Tari'
@@ -937,7 +937,7 @@ Using `=` with a subquery requires the subquery to return exactly one row. Use `
 
 ## Conclusion
 
-A live SQL test without autocomplete is humbling. The tooling we rely on every day — autocomplete, schema browsers, query formatters — hides gaps in our knowledge. The test exposed mine brutally.
+A live SQL test without autocomplete is humbling. The tooling we rely on every day: autocomplete, schema browsers, query formatters: hides gaps in our knowledge. The test exposed mine brutally.
 
 The fix is not to abandon DBeaver. It is to occasionally write SQL in a plain text editor, from scratch, without assistance. Muscle memory for syntax only forms through deliberate practice.
 
@@ -1028,7 +1028,7 @@ C. `SELECT Transaksi.* FROM Pelanggan, Transaksi WHERE Pelanggan.KdPelanggan = T
 
 D. `SELECT Transaksi.* FROM Pelanggan, Transaksi WHERE Pelanggan.KdPelanggan = Transaksi.KdPelanggan AND Pelanggan.NmPelanggan = 'Tk. Barokah'`
 
-**Answer: D.** The condition must join `Pelanggan` and `Transaksi` on `KdPelanggan`, then filter by `NmPelanggan`. Option B uses `KdPelanggan = 'Tk. Barokah'` which compares the wrong column — `Tk. Barokah` is a name, not a code. Option C shows all transactions without filtering by customer name.
+**Answer: D.** The condition must join `Pelanggan` and `Transaksi` on `KdPelanggan`, then filter by `NmPelanggan`. Option B uses `KdPelanggan = 'Tk. Barokah'` which compares the wrong column: `Tk. Barokah` is a name, not a code. Option C shows all transactions without filtering by customer name.
 
 ---
 
@@ -1080,7 +1080,7 @@ D. `Select NmPelanggan From Pelanggan Inner Transaksi on Pelanggan.KdPelanggan =
 
 **Answer: C.** Two critical fixes:
 
-1. `Kota = 'JKT' AND Kota = 'YOG'` is always false — no single row has both values. Use `Kota IN ('JKT', 'YOG')`.
+1. `Kota = 'JKT' AND Kota = 'YOG'` is always false: no single row has both values. Use `Kota IN ('JKT', 'YOG')`.
 2. `BETWEEN` requires `AND` as a separator: `BETWEEN '11/5/2020' AND '12/5/2020'`.
 
 ---
@@ -1100,7 +1100,7 @@ D. `Select NoTransaksi, TglTransaksi, KdPelanggan, NmPelanggan, KdProduk, NmProd
 **Answer: D.** Two important issues:
 
 1. `KdProduk = 'PRD01' AND KdProduk = 'PRD03'` can never be true for any single row. Use `IN ('PRD01', 'PRD03')` or `OR`.
-2. You need exactly two `INNER JOIN` keywords — one for `Pelanggan`, one for `Produk`. Option A mixes `join` and `Inner Join` inconsistently.
+2. You need exactly two `INNER JOIN` keywords: one for `Pelanggan`, one for `Produk`. Option A mixes `join` and `Inner Join` inconsistently.
 
 ---
 
