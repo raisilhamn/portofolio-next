@@ -1,7 +1,7 @@
 ---
 title: "SQL Technical Test: Mistakes, Lessons, and What I Relearned"
 date: "2026-06-02"
-excerpt: "After bombing a live SQL technical test: thanks to DBeaver's autocomplete addiction: I go back to fundamentals: order of execution, JOINs, every SQL keyword, and a full practice test with answers."
+excerpt: "I've been writing SQL in DBeaver for years. The autocomplete help me a lot in my previous job. I stop memorizing and start just... clicking. Then I had a job interview with a live coding in google docs. No autocomplete."
 tags: ["sql", "interviews", "database", "learning"]
 ---
 
