@@ -126,10 +126,24 @@ SELECT * FROM colors CROSS JOIN sizes;
 -- 5 colors × 3 sizes = 15 rows
 ```
 
+### What Does a Bare `JOIN` Do?
+
+Writing just `JOIN` without any qualifier — e.g. `FROM a JOIN b ON a.id = b.id` — defaults to **`INNER JOIN`** in PostgreSQL (and in MySQL, SQLite, and SQL Server). These two are identical:
+
+```sql
+SELECT * FROM customer JOIN invoice ON customer.id = invoice.customer_id;
+SELECT * FROM customer INNER JOIN invoice ON customer.id = invoice.customer_id;
+```
+
+This is true in the SQL standard as well: `JOIN` is shorthand for `INNER JOIN`. However, you cannot write just `INNER` without `JOIN` — `FROM a INNER b ON ...` is a syntax error.
+
+Because the bare `JOIN` is ambiguous to read (does the author mean INNER? did they forget LEFT?), most style guides recommend always writing the full keyword: `INNER JOIN`, `LEFT JOIN`, etc.
+
 ### Quick Reference
 
 | Join | Left rows | Right rows | Match rows |
 |------|-----------|------------|------------|
+| `JOIN` (bare) | Same as `INNER JOIN` | Same as `INNER JOIN` | Same as `INNER JOIN` |
 | `INNER JOIN` | Only matched | Only matched | Both |
 | `LEFT JOIN` | All | Only matched | Both |
 | `RIGHT JOIN` | Only matched | All | Both |
@@ -139,6 +153,17 @@ SELECT * FROM colors CROSS JOIN sizes;
 ---
 
 ## All SQL Keywords (Grouped by Category)
+
+A quick way to keep them straight:
+
+| Category | Full Name | What It Does | Keywords |
+|----------|-----------|--------------|----------|
+| **DDL** | Data Definition Language | Modify database **structure** (objects) | `CREATE`, `ALTER`, `DROP`, `TRUNCATE` |
+| **DML** | Data Manipulation Language | Modify **data** inside tables | `SELECT`, `INSERT`, `UPDATE`, `DELETE` |
+| **DCL** | Data Control Language | Control **access** (permissions) | `GRANT`, `REVOKE` |
+| **TCL** | Transaction Control Language | Control **transactions** | `COMMIT`, `ROLLBACK`, `SAVEPOINT` |
+
+Common trap: `DELETE` (DML) removes rows; `DROP` (DDL) removes entire tables. `TRUNCATE` (DDL) removes all rows quickly but cannot be rolled back in some databases.
 
 ### DDL — Data Definition Language
 
@@ -259,6 +284,14 @@ Stress made me write `SELECT NoFaktur = 'P-010' FROM ...` instead of `UPDATE ...
 
 ```sql
 UPDATE Penjualan SET NoFaktur = 'P-010' WHERE KdBarang = 'FTCOA' AND Qty = 60;
+```
+
+**`UPDATE` does not use `*` or a column list.** Unlike `SELECT *` or `SELECT col1, col2`, the columns you intend to modify appear only inside the `SET` clause. You never write `UPDATE table SET * ...` or specify target columns outside `SET`. The pattern is simply:
+
+```
+UPDATE table_name
+SET column1 = value1, column2 = value2
+WHERE condition;
 ```
 
 ### 3. Forgetting the `JOIN` Keyword
