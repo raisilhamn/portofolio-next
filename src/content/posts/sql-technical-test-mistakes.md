@@ -899,30 +899,42 @@ In the heat of the moment, I used `ORDER BY` where `GROUP BY` was needed for agg
 
 I wrote `TglFaktur '11/5/2020 - 12/5/2020'` instead of `TglFaktur BETWEEN '11/5/2020' AND '12/5/2020'`. The `BETWEEN` keyword requires `AND` as the separator, not a dash.
 
-### 6. String Comparison in `WHERE` Without Quotes
-
-I wrote `WHERE KdCust = Tk. Tari`: no quotes around the string value. Strings must always be quoted:
-
-```sql
-WHERE NmCust = 'Tk. Tari'
-```
-
-### 7. Using `VIEW` Instead of `SELECT`
+### 6. Using `VIEW` Instead of `SELECT`
 
 A `VIEW` is a saved query (a virtual table), not a command to display data. The correct keyword for retrieving data is `SELECT`.
 
-### 8. `COUNT(*)` vs `COUNT(column)`
+### 7. `COUNT(*)` vs `SUM()` Confusion
 
-When counting rows, `COUNT(*)` counts all rows including nulls. `COUNT(column)` counts only non-null values in that column. I mixed these up in aggregate queries.
+In the live test heat, I grabbed `COUNT()` when the question asked for a total quantity, and `SUM()` when I needed a row count. The difference matters:
 
-### 9. `DELETE` vs `DROP`
+```sql
+-- COUNT: how many rows?
+SELECT COUNT(*) FROM Transaksi WHERE KdProduk = 'PRD01';
+-- Result: 2 (two transactions for PRD01)
+
+-- SUM: what is the total quantity?
+SELECT SUM(Jumlah) FROM Transaksi WHERE KdProduk = 'PRD01';
+-- Result: 75 (15 + 60)
+
+-- COUNT on a specific column ignores NULLs
+SELECT COUNT(phone) FROM Pelanggan;  -- only rows with a phone number
+SELECT COUNT(*) FROM Pelanggan;       -- all rows, including those with NULL phone
+```
+
+Common exam traps:
+- "Jumlah faktur" (number of invoices) = `COUNT(NoFaktur)` or `COUNT(*)`
+- "Jumlah Qty penjualan" (total quantity sold) = `SUM(Qty)`
+- `COUNT(column)` skips NULLs; `COUNT(*)` counts every row
+- `SUM` and `AVG` only work on numeric columns; `COUNT` works on any
+
+### 8. `DELETE` vs `DROP`
 
 - `DELETE FROM table WHERE ...` removes **rows** (DML)
 - `DROP TABLE table` removes the entire **table** (DDL)
 
 I answered a DDL question with `DELETE` instead of `DROP`.
 
-### 10. Subquery in `UPDATE`
+### 9. Subquery in `UPDATE`
 
 For correlated updates, the subquery syntax matters:
 
@@ -938,15 +950,6 @@ Using `=` with a subquery requires the subquery to return exactly one row. Use `
 ## Conclusion
 
 A live SQL test without autocomplete is humbling. The tooling we rely on every day: autocomplete, schema browsers, query formatters: hides gaps in our knowledge. The test exposed mine brutally.
-
-The fix is not to abandon DBeaver. It is to occasionally write SQL in a plain text editor, from scratch, without assistance. Muscle memory for syntax only forms through deliberate practice.
-
-If you are preparing for a SQL technical test:
-
-1. **Memorize the execution order.** It answers half the tricky questions.
-2. **Practice JOINs on paper.** Draw the Venn diagrams if needed.
-3. **Know the difference between DDL and DML cold.** `CREATE/ALTER/DROP` vs `SELECT/INSERT/UPDATE/DELETE`.
-4. **Write queries without autocomplete.** Even 15 minutes a day makes a difference.
 
 ---
 
@@ -996,7 +999,9 @@ C. `Alter Table Pelanggan ( KdPelanggan Varchar(10), NmPelanggan Varchar(100), K
 
 D. `Create Table Pelanggan Value ( KdPelanggan Varchar(10), NmPelanggan Varchar(100), Kota Varchar(10) )`
 
-**Answer: B.** `CREATE TABLE` is the DDL command to create a new table. `ALTER` modifies an existing table. `SELECT` retrieves data. `VALUE` / `VALUES` belongs to `INSERT`, not `CREATE TABLE`.
+> > **Answer: B.** `CREATE TABLE` is the DDL command to create a new table. `ALTER` modifies an existing table. `SELECT` retrieves data.
+>
+> Option D is wrong because `Value` (singular) is not valid SQL syntax. The `CREATE TABLE` statement takes a parenthesized column list directly — no `VALUE` or `VALUES` keyword between the table name and the column definitions. `VALUES` belongs to `INSERT INTO`, not `CREATE TABLE`.
 
 ---
 
@@ -1012,7 +1017,7 @@ C. `VIEW * FROM Pelanggan WHERE Kota='JKT'`
 
 D. `SELECT * FROM Data_Pelanggan WHERE Kota='JKT'`
 
-**Answer: A.** The table is named `Pelanggan`, not `TPelanggan` or `Data_Pelanggan`. `VIEW` is used to create a virtual table, not to query data.
+> **Answer: A.** The table is named `Pelanggan`, not `TPelanggan` or `Data_Pelanggan`. `VIEW` is used to create a virtual table, not to query data.
 
 ---
 
@@ -1028,7 +1033,7 @@ C. `SELECT Transaksi.* FROM Pelanggan, Transaksi WHERE Pelanggan.KdPelanggan = T
 
 D. `SELECT Transaksi.* FROM Pelanggan, Transaksi WHERE Pelanggan.KdPelanggan = Transaksi.KdPelanggan AND Pelanggan.NmPelanggan = 'Tk. Barokah'`
 
-**Answer: D.** The condition must join `Pelanggan` and `Transaksi` on `KdPelanggan`, then filter by `NmPelanggan`. Option B uses `KdPelanggan = 'Tk. Barokah'` which compares the wrong column: `Tk. Barokah` is a name, not a code. Option C shows all transactions without filtering by customer name.
+> **Answer: D.** The condition must join `Pelanggan` and `Transaksi` on `KdPelanggan`, then filter by `NmPelanggan`. Option B uses `KdPelanggan = 'Tk. Barokah'` which compares the wrong column: `Tk. Barokah` is a name, not a code. Option C shows all transactions without filtering by customer name.
 
 ---
 
@@ -1044,7 +1049,7 @@ C. `VIEW * FROM Produk WHERE Stok >= 150`
 
 D. `SELECT * FROM Produk WHERE TStok > 150`
 
-**Answer: B.** `>=` means "greater than or equal to". Option D uses `TStok` which is not a column name. Options A and C use `VIEW` incorrectly.
+> **Answer: B.** `>=` means "greater than or equal to". Option D uses `TStok` which is not a column name. Options A and C use `VIEW` incorrectly.
 
 Expected result: INDOMIE GORENG 85 GR (stok 150) and BERAS ROJOLELE 5 KG (stok 200).
 
@@ -1062,7 +1067,7 @@ C. `Select CNmPelanggan, CKota From Pelanggan Inner join Transaksi on Pelanggan.
 
 D. `Select NmPelanggan, Kota From Pelanggan Inner join Transaksi on Pelanggan.KdPelanggan = Transaksi.KdPelanggan`
 
-**Answer: D.** The keyword is `INNER JOIN`, not just `JOIN` (though `JOIN` defaults to `INNER JOIN` in most databases). The critical error in A is omitting `INNER`. Option B is missing `JOIN` after `INNER`. Option C uses wrong column prefixes `CNmPelanggan` and `CKota`.
+> **Answer: D.** The keyword is `INNER JOIN`, not just `JOIN` (though `JOIN` defaults to `INNER JOIN` in most databases). The critical error in A is omitting `INNER`. Option B is missing `JOIN` after `INNER`. Option C uses wrong column prefixes `CNmPelanggan` and `CKota`.
 
 ---
 
@@ -1078,7 +1083,7 @@ C. `Select NmPelanggan From Pelanggan Inner join Transaksi on Pelanggan.KdPelang
 
 D. `Select NmPelanggan From Pelanggan Inner Transaksi on Pelanggan.KdPelanggan = Transaksi.KdPelanggan Where Kota = 'JKT' AND Kota = 'YOG' AND Between '11/5/2020 - 12/5/2020'`
 
-**Answer: C.** Two critical fixes:
+> **Answer: C.** Two critical fixes:
 
 1. `Kota = 'JKT' AND Kota = 'YOG'` is always false: no single row has both values. Use `Kota IN ('JKT', 'YOG')`.
 2. `BETWEEN` requires `AND` as a separator: `BETWEEN '11/5/2020' AND '12/5/2020'`.
@@ -1097,7 +1102,7 @@ C. `Select NoTransaksi, TglTransaksi, KdPelanggan, NmPelanggan, KdProduk, NmProd
 
 D. `Select NoTransaksi, TglTransaksi, KdPelanggan, NmPelanggan, KdProduk, NmProduk, Jumlah From Transaksi Inner join Pelanggan on Pelanggan.KdPelanggan = Transaksi.KdPelanggan Inner join Produk on Produk.KdProduk = Transaksi.KdProduk Where KdProduk IN ('PRD01', 'PRD03')`
 
-**Answer: D.** Two important issues:
+> **Answer: D.** Two important issues:
 
 1. `KdProduk = 'PRD01' AND KdProduk = 'PRD03'` can never be true for any single row. Use `IN ('PRD01', 'PRD03')` or `OR`.
 2. You need exactly two `INNER JOIN` keywords: one for `Pelanggan`, one for `Produk`. Option A mixes `join` and `Inner Join` inconsistently.
@@ -1116,7 +1121,7 @@ C. `Select AVG(Transaksi.NoTransaksi) as JmlTransaksi, NmPelanggan From Transaks
 
 D. `Select COUNT(Transaksi.NoTransaksi) as JmlTransaksi, NmPelanggan From Transaksi Inner join Pelanggan on Pelanggan.KdPelanggan = Transaksi.KdPelanggan Group by NmPelanggan`
 
-**Answer: D.** `COUNT(Transaksi.NoTransaksi)` counts non-null transaction numbers per customer. `COUNT(*)` (option A) also works but counts all rows regardless of nulls. `SUM` and `AVG` make no sense on a transaction ID column. The key pattern is:
+> **Answer: D.** `COUNT(Transaksi.NoTransaksi)` counts non-null transaction numbers per customer. `COUNT(*)` (option A) also works but counts all rows regardless of nulls. `SUM` and `AVG` make no sense on a transaction ID column. The key pattern is:
 
 - `COUNT` for counting
 - `GROUP BY` with the non-aggregated column (`NmPelanggan`)
@@ -1135,7 +1140,7 @@ C. `Select KdProduk, NmProduk, COUNT(Transaksi.Jumlah) From Produk Inner Join Tr
 
 D. `Select KdProduk, NmProduk, AVG(Transaksi.Jumlah) From Produk Inner Join Transaksi on Produk.KdProduk = Transaksi.KdProduk Group by KdProduk`
 
-**Answer: A.** The question asks for "total Jumlah" (sum of quantity), so `SUM()` is the correct aggregate. `COUNT()` counts rows. `AVG()` computes the average. Also, when selecting `NmProduk` alongside a grouped `KdProduk`, modern SQL requires `NmProduk` to also appear in `GROUP BY`.
+> **Answer: A.** The question asks for "total Jumlah" (sum of quantity), so `SUM()` is the correct aggregate. `COUNT()` counts rows. `AVG()` computes the average. Also, when selecting `NmProduk` alongside a grouped `KdProduk`, modern SQL requires `NmProduk` to also appear in `GROUP BY`.
 
 Expected result:
 
@@ -1159,7 +1164,7 @@ C. `UPDATE Transaksi SET NoTransaksi = 'T-010' Where KdProduk='PRD01' AND Jumlah
 
 D. `DELETE Transaksi SET Where KdProduk='PRD01' AND Jumlah=60 AND NoTransaksi = 'T-010'`
 
-**Answer: C.** `UPDATE table SET column = value WHERE condition` is the correct DML syntax. `SELECT` cannot modify data. `INSERT` adds new rows, not modify existing ones. `DELETE` removes rows.
+> **Answer: C.** `UPDATE table SET column = value WHERE condition` is the correct DML syntax. `SELECT` cannot modify data. `INSERT` adds new rows, not modify existing ones. `DELETE` removes rows.
 
 ---
 
@@ -1175,7 +1180,7 @@ C. `UPDATE Transaksi SET Jumlah = 100 Where SELECT KdPelanggan From Pelanggan Wh
 
 D. `UPDATE Transaksi SET Jumlah = 100 Where KdPelanggan IN (SELECT KdPelanggan From Pelanggan Where Pelanggan.Kota = 'JKT')`
 
-**Answer: D.** Since multiple customers may be in JKT (Warung Makan and Ap. Keluarga), the subquery returns multiple rows. The `=` operator expects exactly one row, so you must use `IN`. The syntax is:
+> **Answer: D.** Since multiple customers may be in JKT (Warung Makan and Ap. Keluarga), the subquery returns multiple rows. The `=` operator expects exactly one row, so you must use `IN`. The syntax is:
 
 - `UPDATE table SET column = value WHERE column IN (subquery)`
 
@@ -1193,7 +1198,7 @@ C. `Delete Pelanggan Where KdPelanggan = '723456'`
 
 D. `Delete * From Pelanggan KdPelanggan = '723456'`
 
-**Answer: A.** The correct DML syntax is `DELETE FROM table WHERE condition`. You do not use `*` with `DELETE` (unlike `SELECT *`). `DELETE Pelanggan` without `FROM` is also incorrect.
+> **Answer: A.** The correct DML syntax is `DELETE FROM table WHERE condition`. You do not use `*` with `DELETE` (unlike `SELECT *`). `DELETE Pelanggan` without `FROM` is also incorrect.
 
 ---
 
@@ -1209,7 +1214,7 @@ C. `INSERT INTO Produk.* VALUES ('PRD04', 'MINYAK GORENG BIMOLI 2L', 75)`
 
 D. `INSERT Produk (KdProduk, NmProduk, Stok) VALUES ('PRD04', 'MINYAK GORENG BIMOLI 2L', 75)`
 
-**Answer: A.** The full syntax is `INSERT INTO table (columns) VALUES (values)`. Option D is missing `INTO`. Options B and C incorrectly use `*`.
+> **Answer: A.** The full syntax is `INSERT INTO table (columns) VALUES (values)`. Option D is missing `INTO`. Options B and C incorrectly use `*`.
 
 ---
 
@@ -1225,7 +1230,7 @@ C. `do-while`
 
 D. `for`
 
-**Answer: A.** `if-else` is a **selection/conditional** statement (branching), not a loop. `while`, `do-while`, and `for` all repeat a block of code.
+> **Answer: A.** `if-else` is a **selection/conditional** statement (branching), not a loop. `while`, `do-while`, and `for` all repeat a block of code.
 
 ---
 
@@ -1241,7 +1246,7 @@ C. Both A and B are correct
 
 D. All answers are wrong
 
-**Answer: C.** Both `if-else` and `switch-case` are selection/conditional statements used to branch execution based on conditions.
+> **Answer: C.** Both `if-else` and `switch-case` are selection/conditional statements used to branch execution based on conditions.
 
 ---
 
@@ -1257,7 +1262,7 @@ C. `Create, Alter, Delete`
 
 D. `Create, Alter, Drop`
 
-**Answer: D.** DDL = `CREATE`, `ALTER`, `DROP`. `INSERT`, `UPDATE`, `DELETE` are DML (Data Manipulation Language). Note that `DELETE` (DML, removes rows) is different from `DROP` (DDL, removes entire objects).
+> **Answer: D.** DDL = `CREATE`, `ALTER`, `DROP`. `INSERT`, `UPDATE`, `DELETE` are DML (Data Manipulation Language). Note that `DELETE` (DML, removes rows) is different from `DROP` (DDL, removes entire objects).
 
 ---
 
@@ -1273,7 +1278,7 @@ C. Store one piece of data of different types
 
 D. Store one piece of data of the same type grouped together
 
-**Answer: B.** An array is a data structure that stores a fixed number of elements, all of the **same type**, in contiguous memory. The key word is "same type."
+> **Answer: B.** An array is a data structure that stores a fixed number of elements, all of the **same type**, in contiguous memory. The key word is "same type."
 
 ---
 
@@ -1289,7 +1294,7 @@ C. `Update`
 
 D. `Commit`
 
-**Answer: D.** `COMMIT` saves all changes permanently. `ROLLBACK` undoes them. `SAVEPOINT` marks a rollback point. `UPDATE` is a DML command, not a transaction control keyword.
+> **Answer: D.** `COMMIT` saves all changes permanently. `ROLLBACK` undoes them. `SAVEPOINT` marks a rollback point. `UPDATE` is a DML command, not a transaction control keyword.
 
 ---
 
@@ -1324,7 +1329,7 @@ FROM Produk
 HAVING BY KdProduk;
 ```
 
-**Answer: B.** When you mix a regular column (`KdProduk`) with an aggregate function (`SUM()`), you **must** use `GROUP BY`. `HAVING BY` is invalid syntax (should be `GROUP BY` with optional `HAVING`). `ORDER BY` sorts but does not group.
+> **Answer: B.** When you mix a regular column (`KdProduk`) with an aggregate function (`SUM()`), you **must** use `GROUP BY`. `HAVING BY` is invalid syntax (should be `GROUP BY` with optional `HAVING`). `ORDER BY` sorts but does not group.
 
 ---
 
@@ -1349,7 +1354,7 @@ C. 3
 
 D. 4
 
-**Answer: B.** In the Transaksi table, `PRD01` appears twice: T-001 (Jumlah 15) and T-003 (Jumlah 60). So `COUNT(*)` returns 2.
+> **Answer: B.** In the Transaksi table, `PRD01` appears twice: T-001 (Jumlah 15) and T-003 (Jumlah 60). So `COUNT(*)` returns 2.
 
 ---
 
@@ -1357,7 +1362,7 @@ D. 4
 
 Write a query to display NoTransaksi, TglTransaksi, NmPelanggan, NmProduk, Jumlah for customers located in YOG with Jumlah greater than 30.
 
-**Answer:**
+> **Answer:**
 
 ```sql
 SELECT
@@ -1384,7 +1389,7 @@ Key points:
 
 What is the output of the query from Question 21?
 
-**Answer:**
+> **Answer:**
 
 | NoTransaksi | TglTransaksi | NmPelanggan | NmProduk | Jumlah |
 |-------------|-------------|-------------|----------|--------|
@@ -1412,7 +1417,7 @@ BEGIN
 END;
 ```
 
-**Answer:**
+> **Answer:**
 
 ```
 Total 5 Students
@@ -1446,7 +1451,7 @@ Additional rules:
 
 **Find the shortest route from A to F following the rules.**
 
-**Answer: A → C → E → F = 9**
+> **Answer: A → C → E → F = 9**
 
 Let us evaluate all valid paths:
 
@@ -1482,7 +1487,7 @@ A store with sales channel "apotik" buying product A:
 
 Write a nested `IF` logic in Java.
 
-**Answer:**
+> **Answer:**
 
 ```java
 public double calculateDiscount(String salesChannel, int quantity, double price) {
