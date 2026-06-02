@@ -671,45 +671,184 @@ WHERE NOT EXISTS (SELECT 1 FROM invoice i WHERE i.customer_id = c.id);
 
 ### Operators and Conditions
 
-| Keyword | Purpose |
-|---------|---------|
-| `AND` | Both conditions must be true |
-| `OR` | At least one condition must be true |
-| `NOT` | Negate a condition |
-| `IN` | Match any value in a list: `WHERE kota IN ('JKT', 'BDG')` |
-| `BETWEEN` | Match a range: `WHERE qty BETWEEN 10 AND 50` |
-| `LIKE` | Pattern matching: `WHERE name LIKE 'A%'` |
-| `IS NULL` / `IS NOT NULL` | Check for null values |
-| `EXISTS` | Check if a subquery returns any rows |
-| `ANY` / `ALL` | Compare against subquery results |
-| `=` / `<>` / `!=` / `>` / `<` / `>=` / `<=` | Comparison operators |
+**`AND` / `OR` / `NOT`**
+
+```sql
+-- AND: both conditions must be true
+SELECT * FROM customer WHERE city = 'JKT' AND name LIKE 'Toko%';
+
+-- OR: at least one condition must be true
+SELECT * FROM customer WHERE city = 'JKT' OR city = 'BDG';
+
+-- NOT: negate a condition
+SELECT * FROM customer WHERE NOT city = 'JKT';
+
+-- Combine with parentheses for correct grouping
+SELECT * FROM customer WHERE (city = 'JKT' OR city = 'BDG') AND name LIKE 'Tk.%';
+```
+
+**`IN`**
+
+```sql
+-- Match any value in a list
+SELECT * FROM customer WHERE city IN ('JKT', 'BDG', 'YOG');
+
+-- IN with subquery
+SELECT * FROM customer WHERE id IN (SELECT customer_id FROM invoice WHERE total > 50000);
+
+-- NOT IN
+SELECT * FROM customer WHERE city NOT IN ('JKT', 'BDG');
+```
+
+**`BETWEEN`**
+
+```sql
+-- BETWEEN is inclusive (>= min AND <= max)
+SELECT * FROM invoice WHERE total BETWEEN 10000 AND 100000;
+
+-- Date range
+SELECT * FROM invoice WHERE date BETWEEN '2026-01-01' AND '2026-06-30';
+
+-- NOT BETWEEN
+SELECT * FROM invoice WHERE total NOT BETWEEN 10000 AND 100000;
+```
+
+**`LIKE` / `ILIKE`**
+
+```sql
+-- % matches any sequence of characters
+SELECT * FROM customer WHERE name LIKE 'Toko%';    -- starts with "Toko"
+SELECT * FROM customer WHERE name LIKE '%Baru';    -- ends with "Baru"
+SELECT * FROM customer WHERE name LIKE '%ar%';     -- contains "ar"
+
+-- _ matches exactly one character
+SELECT * FROM customer WHERE name LIKE 'Tk. ___';  -- "Tk." followed by 3 chars
+
+-- ILIKE is case-insensitive (PostgreSQL)
+SELECT * FROM customer WHERE name ILIKE 'toko%';
+```
+
+**`IS NULL` / `IS NOT NULL`**
+
+```sql
+-- Find rows with NULL
+SELECT * FROM customer WHERE phone IS NULL;
+
+-- Find rows with a value
+SELECT * FROM customer WHERE phone IS NOT NULL;
+
+-- Common trap: = NULL does not work (NULL is not equal to anything)
+SELECT * FROM customer WHERE phone IS NULL;   -- correct
+SELECT * FROM customer WHERE phone = NULL;    -- WRONG! Never returns rows
+```
+
+**`EXISTS`**
+
+```sql
+-- Check if at least one matching row exists in subquery
+SELECT name FROM customer c
+WHERE EXISTS (SELECT 1 FROM invoice i WHERE i.customer_id = c.id);
+
+-- NOT EXISTS (anti-join)
+SELECT name FROM customer c
+WHERE NOT EXISTS (SELECT 1 FROM invoice i WHERE i.customer_id = c.id);
+```
 
 ### Aggregate Functions
 
-| Function | Purpose |
-|----------|---------|
-| `COUNT(*)` | Count rows |
-| `COUNT(column)` | Count non-null values in a column |
-| `SUM(column)` | Sum of values |
-| `AVG(column)` | Average of values |
-| `MIN(column)` | Minimum value |
-| `MAX(column)` | Maximum value |
+All examples use this dataset context:
+
+```sql
+-- Counting
+SELECT COUNT(*) AS total_rows FROM invoice;             -- all rows including nulls
+SELECT COUNT(customer_id) FROM invoice;                 -- non-null customer_ids only
+SELECT COUNT(DISTINCT customer_id) FROM invoice;        -- unique customers
+
+-- Sum with grouping
+SELECT customer_id, SUM(total) AS revenue
+FROM invoice
+GROUP BY customer_id;
+
+-- Average with rounding
+SELECT customer_id, ROUND(AVG(total), 2) AS avg_order
+FROM invoice
+GROUP BY customer_id;
+
+-- Min and Max
+SELECT MIN(date) AS first_order, MAX(date) AS last_order FROM invoice;
+
+-- Multiple aggregates in one query
+SELECT
+    customer_id,
+    COUNT(*) AS orders,
+    SUM(total) AS revenue,
+    AVG(total) AS avg_total,
+    MIN(total) AS smallest,
+    MAX(total) AS largest
+FROM invoice
+GROUP BY customer_id;
+```
 
 ### Set Operations
 
-| Keyword | Purpose |
-|---------|---------|
-| `UNION` | Combine two queries, removing duplicates |
-| `UNION ALL` | Combine two queries, keeping duplicates |
-| `INTERSECT` | Return rows present in both queries |
-| `EXCEPT` (or `MINUS`) | Return rows in first query not in second |
+```sql
+-- UNION: combine two queries, remove duplicates
+SELECT city FROM customer WHERE city IN ('JKT', 'BDG')
+UNION
+SELECT city FROM supplier WHERE city IN ('BDG', 'YOG');
+-- Result: JKT, BDG, YOG
 
-### Subquery Keywords
+-- UNION ALL: combine, keep duplicates
+SELECT city FROM customer WHERE city IN ('JKT', 'BDG')
+UNION ALL
+SELECT city FROM supplier WHERE city IN ('BDG', 'YOG');
+-- Result: JKT, BDG, BDG, YOG (BDG appears twice)
 
-| Keyword | Purpose |
-|---------|---------|
-| `IN (subquery)` | Match any value from subquery |
-| `EXISTS (subquery)` | Check if subquery returns rows |
+-- INTERSECT: rows that appear in both queries
+SELECT city FROM customer
+INTERSECT
+SELECT city FROM supplier;
+-- Result: cities that have both a customer and a supplier
+
+-- EXCEPT: rows in first query that are NOT in second (PostgreSQL, SQL Server)
+SELECT city FROM customer
+EXCEPT
+SELECT city FROM supplier;
+-- Result: cities that have customers but no suppliers
+```
+
+### Subquery Patterns
+
+```sql
+-- Subquery in WHERE with IN
+SELECT name FROM customer
+WHERE id IN (SELECT customer_id FROM invoice WHERE date >= '2026-01-01');
+
+-- Subquery in WHERE with = (must return exactly one row)
+SELECT name FROM customer
+WHERE id = (SELECT MAX(customer_id) FROM invoice);
+
+-- Subquery in SELECT (scalar subquery — one row, one column)
+SELECT name,
+    (SELECT COUNT(*) FROM invoice WHERE customer_id = customer.id) AS order_count
+FROM customer;
+
+-- Subquery in FROM (derived table)
+SELECT sub.city, AVG(sub.order_count) AS avg_orders
+FROM (
+    SELECT city, COUNT(i.id) AS order_count
+    FROM customer c
+    LEFT JOIN invoice i ON c.id = i.customer_id
+    GROUP BY c.id, city
+) sub
+GROUP BY sub.city;
+
+-- Correlated subquery (references outer query)
+SELECT c.name, c.city,
+    (SELECT SUM(total) FROM invoice WHERE customer_id = c.id) AS total_spent
+FROM customer c
+WHERE (SELECT SUM(total) FROM invoice WHERE customer_id = c.id) > 100000;
+```
 
 ---
 
