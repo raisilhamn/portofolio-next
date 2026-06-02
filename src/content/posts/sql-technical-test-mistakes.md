@@ -77,11 +77,50 @@ Table A: {1, 2, 3}    Table B: {2, 3, 4}
 A INNER JOIN B => {2, 3}
 ```
 
+**Example 1 — Basic two-table join:**
+
 ```sql
 SELECT customer.name, invoice.total
 FROM customer
 INNER JOIN invoice ON customer.id = invoice.customer_id;
 ```
+
+**Example 2 — Three-table join:**
+
+```sql
+SELECT c.name, i.total, p.name AS product
+FROM customer c
+INNER JOIN invoice i ON c.id = i.customer_id
+INNER JOIN product p ON i.product_id = p.id;
+```
+
+**Example 3 — Join with WHERE filter:**
+
+```sql
+SELECT c.name, i.total, i.date
+FROM customer c
+INNER JOIN invoice i ON c.id = i.customer_id
+WHERE i.total > 100000 AND c.city = 'JKT';
+```
+
+**Example 4 — Join with GROUP BY and aggregate:**
+
+```sql
+SELECT c.name, COUNT(i.id) AS total_invoices, SUM(i.total) AS total_spent
+FROM customer c
+INNER JOIN invoice i ON c.id = i.customer_id
+GROUP BY c.name;
+```
+
+**Example 5 — Self-join (join a table to itself):**
+
+```sql
+SELECT e.name AS employee, m.name AS manager
+FROM employee e
+INNER JOIN employee m ON e.manager_id = m.id;
+```
+
+---
 
 ### LEFT JOIN (LEFT OUTER JOIN)
 
@@ -91,6 +130,8 @@ Returns **all rows from the left table** plus matching rows from the right table
 A LEFT JOIN B => {(1, null), (2, 2), (3, 3)}
 ```
 
+**Example 1 — Basic left join:**
+
 ```sql
 SELECT customer.name, invoice.total
 FROM customer
@@ -98,9 +139,52 @@ LEFT JOIN invoice ON customer.id = invoice.customer_id;
 -- Shows ALL customers, even those with no invoices
 ```
 
+**Example 2 — Find customers with NO invoices (anti-join pattern):**
+
+```sql
+SELECT customer.name
+FROM customer
+LEFT JOIN invoice ON customer.id = invoice.customer_id
+WHERE invoice.id IS NULL;
+```
+
+**Example 3 — LEFT JOIN with aggregation:**
+
+```sql
+SELECT c.name, COALESCE(SUM(i.total), 0) AS total_spent
+FROM customer c
+LEFT JOIN invoice i ON c.id = i.customer_id
+GROUP BY c.name;
+-- COALESCE turns NULL sums into 0 for customers with no purchases
+```
+
+**Example 4 — Multiple LEFT JOINs chained:**
+
+```sql
+SELECT c.name, i.total, p.name AS product, s.name AS shipper
+FROM customer c
+LEFT JOIN invoice i ON c.id = i.customer_id
+LEFT JOIN product p ON i.product_id = p.id
+LEFT JOIN shipment s ON i.id = s.invoice_id;
+```
+
+**Example 5 — LEFT JOIN vs INNER JOIN side-by-side:**
+
+```sql
+-- INNER: only customers who bought something
+SELECT c.name FROM customer c INNER JOIN invoice i ON c.id = i.customer_id;
+
+-- LEFT: ALL customers, nulls where no invoice exists
+SELECT c.name FROM customer c LEFT JOIN invoice i ON c.id = i.customer_id;
+```
+
+---
+
 ### RIGHT JOIN (RIGHT OUTER JOIN)
 
 Same as LEFT JOIN but reversed — all rows from the right table.
+
+**Example 1 — Basic right join:**
 
 ```sql
 SELECT customer.name, invoice.total
@@ -108,6 +192,45 @@ FROM customer
 RIGHT JOIN invoice ON customer.id = invoice.customer_id;
 -- Shows ALL invoices, even orphaned ones
 ```
+
+**Example 2 — Find orphaned invoices (no matching customer):**
+
+```sql
+SELECT invoice.id, invoice.total
+FROM customer
+RIGHT JOIN invoice ON customer.id = invoice.customer_id
+WHERE customer.id IS NULL;
+```
+
+**Example 3 — RIGHT JOIN with filter on left table:**
+
+```sql
+SELECT c.name, i.total
+FROM customer c
+RIGHT JOIN invoice i ON c.id = i.customer_id
+WHERE i.date >= '2026-01-01';
+```
+
+**Example 4 — Three-table RIGHT JOIN chain:**
+
+```sql
+SELECT s.name AS supplier, p.name AS product, i.total
+FROM supplier s
+RIGHT JOIN product p ON s.id = p.supplier_id
+RIGHT JOIN invoice i ON p.id = i.product_id;
+```
+
+**Example 5 — Rewriting RIGHT JOIN as LEFT JOIN (preferred style):**
+
+```sql
+-- RIGHT JOIN (less common, harder to read)
+SELECT c.name, i.total FROM customer c RIGHT JOIN invoice i ON c.id = i.customer_id;
+
+-- Same query as LEFT JOIN (preferred)
+SELECT c.name, i.total FROM invoice i LEFT JOIN customer c ON c.id = i.customer_id;
+```
+
+---
 
 ### FULL OUTER JOIN
 
@@ -117,13 +240,109 @@ Returns all rows from both tables. Unmatched sides become `NULL`.
 A FULL OUTER JOIN B => {(1, null), (2, 2), (3, 3), (null, 4)}
 ```
 
+**Example 1 — Basic full outer join:**
+
+```sql
+SELECT c.name, i.total
+FROM customer c
+FULL OUTER JOIN invoice i ON c.id = i.customer_id;
+```
+
+**Example 2 — Find mismatches on BOTH sides:**
+
+```sql
+SELECT c.name, i.id AS invoice_id
+FROM customer c
+FULL OUTER JOIN invoice i ON c.id = i.customer_id
+WHERE c.id IS NULL OR i.id IS NULL;
+-- Shows customers without invoices AND invoices without customers
+```
+
+**Example 3 — FULL OUTER with COALESCE for cleaner output:**
+
+```sql
+SELECT
+    COALESCE(c.name, 'NO CUSTOMER') AS customer,
+    COALESCE(i.id::text, 'NO INVOICE') AS invoice
+FROM customer c
+FULL OUTER JOIN invoice i ON c.id = i.customer_id;
+```
+
+**Example 4 — FULL OUTER joining three tables (PostgreSQL):**
+
+```sql
+SELECT COALESCE(c.name, '?') AS customer,
+       COALESCE(p.name, '?') AS product,
+       COALESCE(i.total::text, '?') AS total
+FROM customer c
+FULL OUTER JOIN invoice i ON c.id = i.customer_id
+FULL OUTER JOIN product p ON i.product_id = p.id;
+```
+
+**Example 5 — FULL OUTER vs UNION ALL simulation (for databases without FULL OUTER):**
+
+```sql
+-- MySQL workaround: simulate FULL OUTER JOIN with UNION
+SELECT c.name, i.total FROM customer c LEFT JOIN invoice i ON c.id = i.customer_id
+UNION
+SELECT c.name, i.total FROM customer c RIGHT JOIN invoice i ON c.id = i.customer_id;
+```
+
+---
+
 ### CROSS JOIN
 
 Cartesian product: every row from the left paired with every row from the right. Rarely what you want.
 
+**Example 1 — Basic cross join:**
+
 ```sql
 SELECT * FROM colors CROSS JOIN sizes;
 -- 5 colors × 3 sizes = 15 rows
+```
+
+**Example 2 — Cross join with WHERE to simulate INNER JOIN (old-style):**
+
+```sql
+SELECT c.name, i.total
+FROM customer c
+CROSS JOIN invoice i
+WHERE c.id = i.customer_id;
+-- Functionally identical to INNER JOIN, but less readable
+```
+
+**Example 3 — Generate a number series (useful trick):**
+
+```sql
+SELECT a.n * 10 + b.n AS number
+FROM (VALUES (0),(1),(2),(3),(4),(5),(6),(7),(8),(9)) AS a(n)
+CROSS JOIN (VALUES (0),(1),(2),(3),(4),(5),(6),(7),(8),(9)) AS b(n)
+ORDER BY number;
+-- Generates numbers 0–99
+```
+
+**Example 4 — Cross join to fill missing combinations:**
+
+```sql
+SELECT d.date, p.name AS product
+FROM (SELECT DISTINCT date FROM sales) d
+CROSS JOIN product p
+ORDER BY d.date, p.name;
+-- All possible date/product pairs, even those with no sales
+```
+
+**Example 5 — Cross join with LATERAL (PostgreSQL):**
+
+```sql
+SELECT c.name, top_sales.total
+FROM customer c
+CROSS JOIN LATERAL (
+    SELECT total FROM invoice
+    WHERE customer_id = c.id
+    ORDER BY total DESC
+    LIMIT 1
+) top_sales;
+-- For each customer, fetch their single largest invoice
 ```
 
 ### What Does a Bare `JOIN` Do?
