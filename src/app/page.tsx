@@ -25,11 +25,11 @@ const experiences = [
     period: "nov 2024 \u2013 may 2026",
     summary: "Full-stack development across an edtech ecosystem serving 500+ institutional clients.",
     details: [
-      "Led the Alumni Tracer Study module (Next.js, Lumen) — shipped SSO, optimized API response times, and modernized the UI across 500+ institutions",
+      "Led the Alumni Tracer Study module (Next.js, Lumen) - shipped SSO, optimized API response times, and modernized the UI across 500+ institutions",
       "Built SIMKERMA, a Laravel collaboration platform with public partner evaluations, bulk Excel import/export with duplicate detection, and automated error reporting",
-      "Built a career services platform within the SIAKAD Cloud ecosystem — job matching, profile management, and career recommendations for students and alumni",
+      "Built a career services platform within the SIAKAD Cloud ecosystem - job matching, profile management, and career recommendations for students and alumni",
       "Modernized an internal ATS (Laravel, Livewire) handling 10,000+ applicant records with a redesigned UI and streamlined hiring workflows",
-      "Managed training.sevima.com — integrated payment gateways, automated email delivery, and digital certificate distribution",
+      "Managed training.sevima.com - integrated payment gateways, automated email delivery, and digital certificate distribution",
       "Resolved 700+ tickets in an Agile team, shipping 86 features and 256 bug fixes",
     ],
     tags: ["Laravel", "PHP", "Next.js", "Livewire", "PostgreSQL", "Jenkins"],
@@ -65,7 +65,7 @@ const experiences = [
 const projects = [
   {
     title: "Shortlink",
-    description: "URL shortener with click analytics — public links expire in 7 days, signed-in users get permanent links with full analytics (clicks by country, referrer, daily chart), admin panel for moderation. Built with Next.js 16, Drizzle ORM, Turso, and NextAuth. Live at s.raisilham.com.",
+    description: "URL shortener with click analytics - public links expire in 7 days, signed-in users get permanent links with full analytics (clicks by country, referrer, daily chart), admin panel for moderation. Built with Next.js 16, Drizzle ORM, Turso, and NextAuth. Live at s.raisilham.com.",
     href: "https://github.com/raisilhamn/shortlink-next",
     tags: ["Next.js", "Drizzle", "Turso", "NextAuth"],
   },
@@ -77,25 +77,25 @@ const projects = [
   },
   {
     title: "InstaApp",
-    description: "Full-stack Instagram clone with Laravel + Inertia.js — user auth, posts, likes, comments, follows, explore feed, real-time notifications. Built with Laravel 11, Vue 3, Inertia.js, and Tailwind CSS.",
+    description: "Full-stack Instagram clone with Laravel + Inertia.js - user auth, posts, likes, comments, follows, explore feed, real-time notifications. Built with Laravel 11, Vue 3, Inertia.js, and Tailwind CSS.",
     href: "https://github.com/raisilhamn/sevima-instaapp",
     tags: ["PHP", "Laravel", "MySQL", "Vue.js", "Tailwind CSS", "Inertia.js"],
   },
   {
     title: "AutoEDA",
-    description: "Automatic Exploratory Data Analysis web app — upload CSV, get comprehensive reports with dynamic visualizations, descriptive statistics, and quantitative analysis for continuous, categorical, and textual data.",
+    description: "Automatic Exploratory Data Analysis web app - upload CSV, get comprehensive reports with dynamic visualizations, descriptive statistics, and quantitative analysis for continuous, categorical, and textual data.",
     href: "https://bit.ly/eda-rais",
     tags: ["Python", "Flask", "Dash", "Pandas"],
   },
   {
     title: "Agronify",
-    description: "Deep learning model for crop disease classification — 8 distinct models using MobileNet achieving 98% accuracy with loss below 4%, enhancing agricultural diagnostics.",
+    description: "Deep learning model for crop disease classification - 8 distinct models using MobileNet achieving 98% accuracy with loss below 4%, enhancing agricultural diagnostics.",
     href: "https://bit.ly/agronify",
     tags: ["Python", "TensorFlow", "MobileNet", "CNN"],
   },
   {
     title: "AksaraKu",
-    description: "Javanese script learning app — 2nd place winner at the 2018 National Kihajar Application Competition, Ministry of Education and Culture.",
+    description: "Javanese script learning app - 2nd place winner at the 2018 National Kihajar Application Competition, Ministry of Education and Culture.",
     href: "https://bit.ly/ME18LOMP02",
     tags: ["Java", "Android", "UI/UX"],
   },

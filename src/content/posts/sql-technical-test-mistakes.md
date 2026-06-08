@@ -1001,7 +1001,7 @@ D. `Create Table Pelanggan Value ( KdPelanggan Varchar(10), NmPelanggan Varchar(
 
 > > **Answer: B.** `CREATE TABLE` is the DDL command to create a new table. `ALTER` modifies an existing table. `SELECT` retrieves data.
 >
-> Option D is wrong because `Value` (singular) is not valid SQL syntax. The `CREATE TABLE` statement takes a parenthesized column list directly — no `VALUE` or `VALUES` keyword between the table name and the column definitions. `VALUES` belongs to `INSERT INTO`, not `CREATE TABLE`.
+> Option D is wrong because `Value` (singular) is not valid SQL syntax. The `CREATE TABLE` statement takes a parenthesized column list directly - no `VALUE` or `VALUES` keyword between the table name and the column definitions. `VALUES` belongs to `INSERT INTO`, not `CREATE TABLE`.
 
 ---
 

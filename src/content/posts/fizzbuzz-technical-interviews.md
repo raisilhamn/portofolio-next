@@ -1,7 +1,7 @@
 ---
 title: "FizzBuzz and the Problem With Technical Interviews"
 date: "2026-04-22"
-excerpt: "Why a simple children's game became the most controversial filter in software hiring — and what it says about the process."
+excerpt: "Why a simple children's game became the most controversial filter in software hiring - and what it says about the process."
 tags: ["programming", "interviews", "opinion"]
 ---
 
@@ -130,7 +130,7 @@ The difference between a candidate who can write FizzBuzz and one who can build 
 ```php
 <?php
 
-// Configurable FizzBuzz — the "extend me" version
+// Configurable FizzBuzz - the "extend me" version
 $rules = [
     3 => 'Fizz',
     5 => 'Buzz',

@@ -1,5 +1,5 @@
 ---
-title: "Diagram as Code — Getting Started with Mermaid JS"
+title: "Diagram as Code - Getting Started with Mermaid JS"
 date: "2026-05-28"
 excerpt: "Mermaid JS lets you create diagrams with plain text. Here is how it works, what you can build, and why diagram-as-code beats drag-and-drop tools."
 tags: ["tools", "visualization", "tutorial"]
@@ -116,21 +116,21 @@ gantt
 
 Three common approaches:
 
-1. **In-browser rendering** — include the Mermaid CDN script. Any `<pre class="mermaid">` block on the page is automatically rendered.
-2. **Markdown integration** — platforms like GitHub, GitLab, and Notion render ` ```mermaid ` blocks natively. Just paste the code and the diagram appears.
-3. **CLI tool** — `npx @mermaid-js/mermaid-cli` converts `.mmd` files to PNG/SVG for use in documents or presentations.
+1. **In-browser rendering** - include the Mermaid CDN script. Any `<pre class="mermaid">` block on the page is automatically rendered.
+2. **Markdown integration** - platforms like GitHub, GitLab, and Notion render ` ```mermaid ` blocks natively. Just paste the code and the diagram appears.
+3. **CLI tool** - `npx @mermaid-js/mermaid-cli` converts `.mmd` files to PNG/SVG for use in documents or presentations.
 
-In this blog, Mermaid code blocks are rendered live using the Mermaid JS library — what you see above is generated directly from the source text.
+In this blog, Mermaid code blocks are rendered live using the Mermaid JS library - what you see above is generated directly from the source text.
 
 ---
 
 ## Why Diagram as Code
 
-- **Version control** — every diagram change has a git history. You can see when and why a node was added or removed.
-- **Reviewable diffs** — a Mermaid diff is plain text. Changing a label or adding an edge shows up clearly in a pull request.
-- **No lock-in** — Mermaid files work in GitHub, GitLab, Notion, and any Markdown renderer.
-- **Speed** — writing `A --> B{"Condition"} -->|"edge"| C` takes seconds. No GUI tool can match that.
-- **Documentation stays in sync** — the diagram lives in the same repo as the code. When the code changes, the diagram changes in the same PR.
+- **Version control** - every diagram change has a git history. You can see when and why a node was added or removed.
+- **Reviewable diffs** - a Mermaid diff is plain text. Changing a label or adding an edge shows up clearly in a pull request.
+- **No lock-in** - Mermaid files work in GitHub, GitLab, Notion, and any Markdown renderer.
+- **Speed** - writing `A --> B{"Condition"} -->|"edge"| C` takes seconds. No GUI tool can match that.
+- **Documentation stays in sync** - the diagram lives in the same repo as the code. When the code changes, the diagram changes in the same PR.
 
 ---
 

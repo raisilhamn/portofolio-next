@@ -10,7 +10,7 @@
 
 ## Where Defined
 
-### globals.css — `@theme inline` block (lines 14–16)
+### globals.css - `@theme inline` block (lines 14–16)
 
 ```
 --font-serif: "Source Serif 4", Georgia, "Times New Roman", serif;
@@ -18,13 +18,13 @@
 --font-mono: "Source Code Pro", "Courier New", monospace;
 ```
 
-### globals.css — body (line 74)
+### globals.css - body (line 74)
 
 ```
 font-family: var(--font-serif);
 ```
 
-### layout.tsx — Google Fonts link (lines 36–39)
+### layout.tsx - Google Fonts link (lines 36–39)
 
 ```html
 <link
@@ -35,11 +35,11 @@ font-family: var(--font-serif);
 
 ## Font Usage Convention
 
-- **Body / prose text** — `var(--font-serif)` (Source Serif 4), inherited from `body`
-- **Headings, labels, UI text** — Tailwind class `font-sans` (Source Sans 3)
-- **Code, dates, tags, metadata** — Tailwind class `font-mono` (Source Code Pro)
-- **Blog prose headings (`h1`–`h4`)** — `font-family: var(--font-sans)` in `.prose` rules
-- **Blog prose code** — `font-family: var(--font-mono)` in `.prose code` rules
+- **Body / prose text** - `var(--font-serif)` (Source Serif 4), inherited from `body`
+- **Headings, labels, UI text** - Tailwind class `font-sans` (Source Sans 3)
+- **Code, dates, tags, metadata** - Tailwind class `font-mono` (Source Code Pro)
+- **Blog prose headings (`h1`–`h4`)** - `font-family: var(--font-sans)` in `.prose` rules
+- **Blog prose code** - `font-family: var(--font-mono)` in `.prose code` rules
 
 ## Loaded Weights
 

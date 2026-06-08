@@ -1,7 +1,7 @@
 ---
 title: "Lambda Calculus for the Impatient"
 date: "2026-02-03"
-excerpt: "A concise introduction to the lambda calculus — functions, application, and the Church numerals."
+excerpt: "A concise introduction to the lambda calculus - functions, application, and the Church numerals."
 tags: ["theory", "programming-languages", "math"]
 ---
 
