@@ -26,34 +26,25 @@ Flowcharts connect nodes with edges. Nodes can be rectangles, rounded boxes, dia
 
 ```mermaid
 flowchart TD
-    Anyone([Anyone]) --> ShortURL["Access /s/{slug}"]
-    ShortURL --> Lookup["Query links table<br/>by slug"]
+    Start([User visits login]) --> HasAccount{Has account?}
     
-    Lookup -->|"Not found"| CheckAlias["Query slug_aliases<br/>by oldSlug"]
-    CheckAlias -->|"Found alias"| ResolveAlias["Resolve to new link"]
-    CheckAlias -->|"Not found"| NotFound["404 Not Found"]
-    ResolveAlias --> Lookup2["Lookup new link"]
+    HasAccount -->|"No"| Register["Show registration form"]
+    Register --> ValidateReg{Valid input?}
+    ValidateReg -->|"No"| ShowErrors["Display field errors"]
+    ShowErrors --> Register
+    ValidateReg -->|"Yes"| CreateAccount["Create account<br/>+ send welcome email"]
+    CreateAccount --> Dashboard["Redirect to dashboard"]
     
-    Lookup -->|"Found"| StatusCheck{Check Status}
-    Lookup2 --> StatusCheck
-    
-    StatusCheck -->|"expired"| ExpiredPage["Expired Page<br/>Public link > 7 days"]
-    StatusCheck -->|"suspended"| SuspendedPage["Suspended Page<br/>Under review"]
-    StatusCheck -->|"disabled"| DisabledPage["Disabled Page<br/>By admin"]
-    StatusCheck -->|"active"| ValidCheck{Valid destination?}
-    
-    ValidCheck -->|"Invalid protocol"| InvalidPage["Invalid Link Page"]
-    ValidCheck -->|"Valid URL"| Collect["Collect Analytics:<br/>- country (IP lookup)<br/>- referrer domain<br/>- user agent family<br/>- ipHash (SHA-256 + daily salt)"]
-    
-    Collect --> SaveClick["Insert to clicks table"]
-    SaveClick --> Turso[(Turso / SQLite)]
-    
-    SaveClick --> TypeCheck{Link Type?}
-    TypeCheck -->|"account"| DirectRedirect["301 Redirect<br/>to destination"]
-    TypeCheck -->|"public"| Disclaimer["Disclaimer Page<br/>+ destination preview"]
-    
-    Disclaimer -->|"Auto-redirect after 5s"| AutoRedirect["Redirect to destination"]
-    Disclaimer -->|"Report this link"| ReportFlow["Go to /report"]
+    HasAccount -->|"Yes"| Login["Show login form"]
+    Login --> ValidateLogin{Valid credentials?}
+    ValidateLogin -->|"No"| ShowLoginError["Show error message"]
+    ShowLoginError --> Login
+    ValidateLogin -->|"Yes + MFA"| MFAChallenge["Prompt for MFA code"]
+    MFAChallenge --> VerifyMFA{MFA correct?}
+    VerifyMFA -->|"No"| ShowMFAError["Show MFA error"]
+    ShowMFAError --> MFAChallenge
+    VerifyMFA -->|"Yes"| Dashboard
+    ValidateLogin -->|"Yes, no MFA"| Dashboard
 ```
 
 Notice the syntax: `Node -->|"edge label"| OtherNode`. The direction is set by `TD` (top-down), `LR` (left-right), or `BT` (bottom-top). Use `[]` for rectangles, `{}` for diamonds, `()` for rounded nodes, and `([...])` for stadium-shaped nodes.
