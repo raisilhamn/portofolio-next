@@ -23,14 +23,14 @@ const experiences = [
     company: "SEVIMA",
     companyUrl: "https://sevima.com",
     period: "nov 2024 \u2013 may 2026",
-    summary: "Full-stack development across the SEVIMA edtech ecosystem serving 500+ institutional clients.",
+    summary: "Full-stack development across an edtech ecosystem serving 500+ institutional clients.",
     details: [
-      "Maintained and enhanced the Alumni Tracer Study Module (Next.js, Lumen, PHP) — delivered UI/UX improvements, API performance optimizations, and SSO integration across the SEVIMA ecosystem",
-      "Built and maintained SIMKERMA (Collaboration Management System) using Laravel, implementing public partner evaluation, advanced Excel import/export with duplicate validation, selective insertion, and automated error-file generation",
-      "Developed a career services platform integrated with the SIAKAD Cloud ecosystem, streamlining job applications, profile management, and career recommendations",
-      "Enhanced an internal Applicant Tracking System (ATS) for HR using Laravel and Livewire, managing 10,000+ applicant records with a modernized UI",
-      "Maintained training.sevima.com — oversaw payment gateway integrations, automated email systems, and digital certificate distribution",
-      "Resolved 700+ technical tickets within Agile framework, delivering 86 feature enhancements and 256 bug fixes",
+      "Led the Alumni Tracer Study module (Next.js, Lumen) — shipped SSO, optimized API response times, and modernized the UI across 500+ institutions",
+      "Built SIMKERMA, a Laravel collaboration platform with public partner evaluations, bulk Excel import/export with duplicate detection, and automated error reporting",
+      "Built a career services platform within the SIAKAD Cloud ecosystem — job matching, profile management, and career recommendations for students and alumni",
+      "Modernized an internal ATS (Laravel, Livewire) handling 10,000+ applicant records with a redesigned UI and streamlined hiring workflows",
+      "Managed training.sevima.com — integrated payment gateways, automated email delivery, and digital certificate distribution",
+      "Resolved 700+ tickets in an Agile team, shipping 86 features and 256 bug fixes",
     ],
     tags: ["Laravel", "PHP", "Next.js", "Livewire", "PostgreSQL", "Jenkins"],
   },
@@ -154,11 +154,11 @@ function HomeContent({ posts }: { posts: PostMeta[] }) {
         </p>
         <h1 className="font-sans text-3xl sm:text-4xl font-semibold tracking-tight mb-4 leading-tight">
           Software Engineer.<br />
-          <span className="text-[var(--color-muted)]">Full-Stack. Machine Learning. Mentor.</span>
+          <span className="text-[var(--color-muted)]">Full-Stack Engineer. ML Practitioner. Educator.</span>
         </h1>
         <p className="text-base leading-relaxed text-[var(--color-muted)] max-w-prose">
-          Software engineer. Built full-stack systems for 500+ institutions at SEVIMA.
-          Machine Learning mentor at Bangkit Academy. Cum Laude graduate in Information Systems.
+          Software engineer. Built systems used by 500+ institutions. Mentored 25 ML students to graduation.
+          Cum Laude graduate in Information Systems.
         </p>
         <div className="mt-5 flex gap-2">
           {socialLinks.map((s) => (
