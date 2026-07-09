@@ -15,6 +15,10 @@ Saya coba. Saya gas pol. Tapi makin lama jaraknya makin jauh, bukan makin dekat.
 
 Satu jam pertama event ini dan saya sudah *dropped*.
 
+![Elevation profile](/images/posts/lakoni-cc-300km-dnf/profile.svg)
+
+![Stats](/images/posts/lakoni-cc-300km-dnf/stats.svg)
+
 ## Tanjakan Clogiop: Cuma 4 KM, Rasanya Kayak Dua Kali Lipat
 
 Setelah pasrah tidak akan bisa nyusul rombongan depan, saya ketemu tanjakan pertama: **Tanjakan Clogiop**. Di Strava cuma KOM cat 3. Empat kilometer doang.

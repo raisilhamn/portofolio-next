@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" width="400" height="200">
+  <rect width="400" height="200" rx="8" fill="#f9fafb" stroke="#e5e7eb" stroke-width="1"/>
+  <text x="12" y="22" font-size="12" fill="#374151" font-weight="600">Lakoni CC 300 · Ride Summary</text>
+  <text x="10" y="35" font-size="10" fill="#6b7280">Distance</text>
+<text x="10" y="53" font-size="16" fill="#111827" font-weight="bold" font-family="monospace">199 km</text>
+<text x="108" y="35" font-size="10" fill="#6b7280">Elevation Gain</text>
+<text x="108" y="53" font-size="16" fill="#111827" font-weight="bold" font-family="monospace">1743 m</text>
+<text x="206" y="35" font-size="10" fill="#6b7280">Moving Time</text>
+<text x="206" y="53" font-size="16" fill="#111827" font-weight="bold" font-family="monospace">10h 29m</text>
+<text x="304" y="35" font-size="10" fill="#6b7280">Avg Speed</text>
+<text x="304" y="53" font-size="16" fill="#111827" font-weight="bold" font-family="monospace">19.0 km/h</text>
+<text x="10" y="90" font-size="10" fill="#6b7280">Max Speed</text>
+<text x="10" y="108" font-size="16" fill="#111827" font-weight="bold" font-family="monospace">58.0 km/h</text>
+<text x="108" y="90" font-size="10" fill="#6b7280">Avg HR</text>
+<text x="108" y="108" font-size="16" fill="#111827" font-weight="bold" font-family="monospace">164 bpm</text>
+<text x="206" y="90" font-size="10" fill="#6b7280">Max HR</text>
+<text x="206" y="108" font-size="16" fill="#111827" font-weight="bold" font-family="monospace">200 bpm</text>
+<text x="304" y="90" font-size="10" fill="#6b7280">Calories</text>
+<text x="304" y="108" font-size="16" fill="#111827" font-weight="bold" font-family="monospace">4,477</text>
+
+</svg>
