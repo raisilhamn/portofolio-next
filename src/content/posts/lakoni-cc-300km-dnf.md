@@ -19,9 +19,9 @@ Satu jam pertama event ini dan saya sudah *dropped*.
 
 ![Stats](/images/posts/lakoni-cc-300km-dnf/stats.svg)
 
-## Tanjakan Clogiop: Cuma 4 KM, Rasanya Kayak Dua Kali Lipat
+## Tanjakan Clogop: Cuma 4 KM, Rasanya Kayak Dua Kali Lipat
 
-Setelah pasrah tidak akan bisa nyusul rombongan depan, saya ketemu tanjakan pertama: **Tanjakan Clogiop**. Di Strava cuma KOM cat 3. Empat kilometer doang.
+Setelah pasrah tidak akan bisa nyusul rombongan depan, saya ketemu tanjakan pertama: **Tanjakan Clogop**. Di Strava cuma KOM cat 3. Empat kilometer doang.
 
 Tapi jangan tertipu.
 
@@ -31,7 +31,7 @@ Saya survive. Pelan-pelan, gigi paling enteng, napas diatur. Sampai puncak denga
 
 ## Dlingo ke Sermo: Rolling yang Menipu
 
-Dari Clogiop lanjut ke Dlingo. Rolling hills. Naik-turun yang kelihatannya ramah, tapi sebenarnya pelan-pelan nguras tenaga. Gak ada tanjakan panjang yang memorable &mdash; cuma akumulasi kecil-kecil yang diam-diam bikin kaki makin berat.
+Dari Clogop lanjut ke Dlingo. Rolling hills. Naik-turun yang kelihatannya ramah, tapi sebenarnya pelan-pelan nguras tenaga. Gak ada tanjakan panjang yang memorable &mdash; cuma akumulasi kecil-kecil yang diam-diam bikin kaki makin berat.
 
 Sampai akhirnya ke **Waduk Sermo**.
 
