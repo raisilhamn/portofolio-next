@@ -64,6 +64,12 @@ const experiences = [
 
 const projects = [
   {
+    title: "Catatan TWK",
+    description: "Study notes site for the Indonesian civil service TWK (Tes Wawasan Kebangsaan) exam - 30+ pages covering Pancasila, UUD 1945, state institutions, and bela negara. Built with VitePress, installable as a PWA with offline reading and generated OG images. Live at note.raisilham.com.",
+    href: "https://note.raisilham.com",
+    tags: ["VitePress", "Vue", "PWA", "Markdown"],
+  },
+  {
     title: "Shortlink",
     description: "URL shortener with click analytics - public links expire in 7 days, signed-in users get permanent links with full analytics (clicks by country, referrer, daily chart), admin panel for moderation. Built with Next.js 16, Drizzle ORM, Turso, and NextAuth. Live at s.raisilham.com.",
     href: "https://github.com/raisilhamn/shortlink-next",
