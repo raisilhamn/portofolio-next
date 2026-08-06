@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { FontSizeControl } from "@/components/font-size-control";
+import { SmoothScroll } from "@/components/smooth-scroll";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from "@/lib/constants";
@@ -103,6 +104,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             &copy; {new Date().getFullYear()} Rais Ilham. Built with Next.js.
           </div>
         </footer>
+        <SmoothScroll />
         <FontSizeControl />
         <Analytics />
       </body>

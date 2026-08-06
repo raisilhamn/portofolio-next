@@ -252,45 +252,43 @@ function HomeContent({ posts }: { posts: PostMeta[] }) {
         </h2>
         <div className="grid gap-4">
           {projects.map((p, i) => (
-            <div
+            <a
               key={p.title}
-              className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-secondary)] p-5 transition-colors hover:border-[var(--color-border-hover)]"
+              href={p.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-secondary)] p-5 no-underline text-[var(--color-fg)] transition-[transform,box-shadow,border-color] duration-300 ease-out hover:border-[var(--color-border-hover)] hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/5"
             >
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1.5">
-                    <span className="font-mono text-[11px] text-[var(--color-muted-2)]">{(i + 1).toString().padStart(2, "0")}</span>
-                    <span className="inline-flex items-center gap-1 rounded px-1.5 py-0.5 font-mono text-[9px] uppercase" style={{ backgroundColor: 'var(--color-bg-secondary)', color: 'var(--color-muted)', border: '1px solid var(--color-border)' }}>
-                      <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: 'var(--color-muted)' }} />
-                      Completed
-                    </span>
-                  </div>
-                  <h3 className="font-sans text-base font-medium mb-1">{p.title}</h3>
-                  <p className="text-sm text-[var(--color-muted)] leading-relaxed">{p.description}</p>
-                </div>
-                  <a
-                    href={p.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="shrink-0 rounded-lg border border-[var(--color-border)] px-2.5 py-1 font-mono text-[10px] text-[var(--color-fg)] no-underline hover:border-[var(--color-border-hover)] transition-colors"
-                  >
-                    <span className="inline-flex items-center gap-1.5">
-                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 blink-live inline-block" />
-                      Live
-                    </span>
-                  </a>
+              <span className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[var(--color-fg)] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-20" />
+
+              <div className="mb-2 flex items-center gap-2 font-mono text-[10px] text-[var(--color-muted-2)]">
+                <span>{(i + 1).toString().padStart(2, "0")}</span>
+                <span className="h-px flex-1 bg-[var(--color-border)]" />
+                {p.href.includes("github.com") ? (
+                  <span className="uppercase tracking-wider">Source</span>
+                ) : (
+                  <span className="inline-flex items-center gap-1.5 uppercase tracking-wider">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 blink-live inline-block" />
+                    Live
+                  </span>
+                )}
+                <span className="inline-block transition-transform duration-300 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5">↗</span>
               </div>
-              <div className="mt-3 flex flex-wrap gap-1.5">
+
+              <h3 className="font-sans text-base font-medium mb-1.5">{p.title}</h3>
+              <p className="text-sm text-[var(--color-muted)] leading-relaxed">{p.description}</p>
+
+              <div className="mt-auto pt-4 flex flex-wrap gap-1.5">
                 {p.tags.map((t) => (
                   <span
                     key={t}
-                    className="rounded border border-[var(--color-border)] px-1.5 py-0.5 font-mono text-[10px] text-[var(--color-muted-2)]"
+                    className="rounded border border-[var(--color-border-hover)] px-1.5 py-0.5 font-mono text-[10px] text-[var(--color-muted)] transition-colors duration-300 group-hover:border-[var(--color-fg)] group-hover:text-[var(--color-fg)]"
                   >
                     {t}
                   </span>
                 ))}
               </div>
-            </div>
+            </a>
           ))}
         </div>
       </section>
@@ -327,7 +325,7 @@ function HomeContent({ posts }: { posts: PostMeta[] }) {
           {skills.map((s) => (
             <span
               key={s}
-              className="rounded border border-[var(--color-border)] px-2.5 py-1 font-mono text-xs text-[var(--color-muted)] hover:border-[var(--color-border-hover)] hover:text-[var(--color-fg)] transition-colors"
+              className="rounded border border-[var(--color-border-hover)] bg-[var(--color-bg-secondary)] px-2.5 py-1 font-mono text-xs text-[var(--color-fg)] hover:border-[var(--color-fg)] transition-colors"
             >
               {s}
             </span>

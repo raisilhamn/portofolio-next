@@ -6,10 +6,15 @@ export function ThemeToggle() {
   useEffect(() => {
     const toggle = document.getElementById("theme-toggle");
     if (!toggle) return;
-    const handler = () => {
+    const swap = () => {
       const isDark = document.documentElement.classList.toggle("dark");
       localStorage.setItem("theme", isDark ? "dark" : "light");
       document.documentElement.style.colorScheme = isDark ? "dark" : "light";
+    };
+    const handler = () => {
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (reduced || !document.startViewTransition) return swap();
+      document.startViewTransition(swap);
     };
     toggle.addEventListener("click", handler);
     return () => toggle.removeEventListener("click", handler);

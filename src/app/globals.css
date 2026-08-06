@@ -5,8 +5,8 @@
   --color-bg: #ffffff;
   --color-bg-secondary: #fafafa;
   --color-fg: #171717;
-  --color-muted: #525252;
-  --color-muted-2: #737373;
+  --color-muted: #4b4b4b;
+  --color-muted-2: #666666;
   --color-border: #e5e5e5;
   --color-border-hover: #d4d4d4;
   --color-link: #2563eb;
@@ -20,8 +20,8 @@
   --color-bg: #0a0a0a;
   --color-bg-secondary: #141414;
   --color-fg: #f5f5f5;
-  --color-muted: #a3a3a3;
-  --color-muted-2: #737373;
+  --color-muted: #b0b0b0;
+  --color-muted-2: #8c8c8c;
   --color-border: #262626;
   --color-border-hover: #404040;
   --color-link: #60a5fa;
@@ -163,4 +163,19 @@ body {
 }
 .heading-anchor:hover {
   color: var(--color-link) !important;
+}
+
+/* Theme swap crossfade (View Transitions API) */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.35s;
+  mix-blend-mode: normal;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
 }
