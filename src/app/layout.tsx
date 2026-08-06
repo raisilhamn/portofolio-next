@@ -72,7 +72,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="flex flex-col min-h-screen antialiased">
         <header className="sticky top-0 z-50 bg-[var(--color-bg)]/80 backdrop-blur-sm border-b border-[var(--color-border)]">
-          <nav className="max-w-3xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
+          <nav className="max-w-4xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
             <Link
               href="/"
               className="font-sans text-sm font-medium text-[var(--color-fg)] no-underline hover:opacity-70 transition-opacity"
@@ -96,11 +96,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </div>
           </nav>
         </header>
-        <main className="flex-1 max-w-3xl mx-auto w-full px-4 sm:px-6 py-12 sm:py-16">
+        <main className="flex-1 max-w-4xl mx-auto w-full px-4 sm:px-6 py-12 sm:py-16">
           {children}
         </main>
         <footer className="border-t border-[var(--color-border)] py-6 text-center text-xs font-sans text-[var(--color-muted-2)]">
-          <div className="max-w-3xl mx-auto px-4">
+          <div className="max-w-4xl mx-auto px-4">
             &copy; {new Date().getFullYear()} Rais Ilham. Built with Next.js.
           </div>
         </footer>
