@@ -64,6 +64,12 @@ const experiences = [
 
 const projects = [
   {
+    title: "Sunnah.fyi",
+    description: "Islamic companion for Indonesia with location-based daily and monthly prayer times, Hijri dates, fasting-day markers, curated daily articles, and morning, evening, and post-prayer dhikr with saved progress. Live at sunnah.fyi.",
+    href: "https://sunnah.fyi",
+    tags: ["Next.js", "TypeScript", "Tailwind CSS"],
+  },
+  {
     title: "Catatan TWK",
     description: "Study notes site for the Indonesian civil service TWK (Tes Wawasan Kebangsaan) exam - 30+ pages covering Pancasila, UUD 1945, state institutions, and bela negara. Built with VitePress, installable as a PWA with offline reading and generated OG images. Live at note.raisilham.com.",
     href: "https://note.raisilham.com",
