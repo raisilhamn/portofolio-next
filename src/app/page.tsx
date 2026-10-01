@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ExperienceList } from "@/components/experience-list";
 import { getAllPosts } from "@/lib/posts";
 import type { PostMeta } from "@/lib/posts";
 import { SITE_URL } from "@/lib/constants";
@@ -196,58 +197,7 @@ function HomeContent({ posts }: { posts: PostMeta[] }) {
           <span className="w-1 h-4 rounded-full bg-[var(--color-fg)] inline-block" />
           Experience
         </h2>
-        <div className="space-y-1">
-          {experiences.map((exp) => (
-            <details
-              key={exp.title}
-              className="group border-b border-[var(--color-border)] py-4 open:pb-4"
-            >
-              <summary className="flex items-start justify-between gap-4 cursor-pointer list-none marker:hidden">
-                <div className="flex-1 min-w-0">
-                  <div className="flex flex-wrap items-baseline gap-2">
-                    <span className="font-sans text-sm font-medium">{exp.title}</span>
-                    <span className="text-[var(--color-muted-2)] text-xs">&middot;</span>
-                    <a
-                      href={exp.companyUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sm text-[var(--color-link)] no-underline hover:underline"
-                    >
-                      {exp.company}
-                    </a>
-                  </div>
-                  <p className="text-xs text-[var(--color-muted)] mt-0.5">{exp.summary}</p>
-                </div>
-                <div className="flex items-center gap-3 shrink-0">
-                  <span className="font-mono text-xs text-[var(--color-muted-2)]">{exp.period}</span>
-                  <span className="font-mono text-sm text-[var(--color-muted-2)] transition-transform duration-200 group-open:rotate-45">
-                    +
-                  </span>
-                </div>
-              </summary>
-              <div className="mt-4 pl-0">
-                <ul className="space-y-2.5">
-                  {exp.details.map((d, i) => (
-                    <li key={i} className="flex items-start gap-3 text-sm text-[var(--color-muted)]">
-                      <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-[var(--color-border-hover)]" />
-                      {d}
-                    </li>
-                  ))}
-                </ul>
-                <div className="mt-4 flex flex-wrap gap-1.5">
-                  {exp.tags.map((t) => (
-                    <span
-                      key={t}
-                      className="rounded border border-[var(--color-border)] px-2 py-0.5 font-mono text-[10px] text-[var(--color-muted)]"
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </details>
-          ))}
-        </div>
+        <ExperienceList experiences={experiences} />
       </section>
 
       {/* Projects */}
@@ -256,7 +206,7 @@ function HomeContent({ posts }: { posts: PostMeta[] }) {
           <span className="w-1 h-4 rounded-full bg-[var(--color-fg)] inline-block" />
           Projects
         </h2>
-        <div className="grid gap-4">
+        <div className="grid gap-4 md:grid-cols-2">
           {projects.map((p, i) => (
             <a
               key={p.title}
@@ -270,13 +220,8 @@ function HomeContent({ posts }: { posts: PostMeta[] }) {
               <div className="mb-2 flex items-center gap-2 font-mono text-[10px] text-[var(--color-muted-2)]">
                 <span>{(i + 1).toString().padStart(2, "0")}</span>
                 <span className="h-px flex-1 bg-[var(--color-border)]" />
-                {p.href.includes("github.com") ? (
+                {p.href.includes("github.com") && (
                   <span className="uppercase tracking-wider">Source</span>
-                ) : (
-                  <span className="inline-flex items-center gap-1.5 uppercase tracking-wider">
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 blink-live inline-block" />
-                    Live
-                  </span>
                 )}
                 <span className="inline-block transition-transform duration-300 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5">↗</span>
               </div>

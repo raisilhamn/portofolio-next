@@ -41,3 +41,6 @@ yarn-error.log*
 next-env.d.ts
 .commandcode/taste/
 Gagal_finish_lakoni_300km_Asma_kumat_sesak_nafas.fit
+.serena/.gitignore
+.serena/project.yml
+cv.tex
