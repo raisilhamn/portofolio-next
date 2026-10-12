@@ -167,7 +167,6 @@ function HomeContent({ posts }: { posts: PostMeta[] }) {
         </p>
         <h1 className="font-sans text-3xl sm:text-4xl font-semibold tracking-tight mb-4 leading-tight">
           Software Engineer.<br />
-          <span className="text-[var(--color-muted)]">Full-Stack Engineer.</span>
         </h1>
         <p className="text-base leading-relaxed text-[var(--color-muted)] max-w-prose">
           Software engineer. Built systems used by 500+ institutions. Mentored 25 ML students to graduation.
@@ -294,21 +293,21 @@ function HomeContent({ posts }: { posts: PostMeta[] }) {
           <div className="flex items-start justify-between gap-4 border-b border-[var(--color-border)] pb-3">
             <div>
               <p className="text-sm font-medium font-sans">Junior Web Programmer</p>
-              <p className="text-xs text-[var(--color-muted)]">BNSP &mdash; National Professional Certification Agency</p>
+              <p className="text-xs text-[var(--color-muted)]">BNSP - National Professional Certification Agency</p>
             </div>
             <span className="font-mono text-xs text-[var(--color-muted-2)] shrink-0">2024 &ndash; 2027</span>
           </div>
           <div className="flex items-start justify-between gap-4 border-b border-[var(--color-border)] pb-3">
             <div>
               <p className="text-sm font-medium font-sans">Certified TensorFlow Developer</p>
-              <p className="text-xs text-[var(--color-muted)]">TensorFlow &mdash; Computer Vision, NLP, CNN</p>
+              <p className="text-xs text-[var(--color-muted)]">TensorFlow - Computer Vision, NLP, CNN</p>
             </div>
             <span className="font-mono text-xs text-[var(--color-muted-2)] shrink-0">2023 &ndash; 2026</span>
           </div>
           <div className="flex items-start justify-between gap-4 border-b border-[var(--color-border)] pb-3">
             <div>
               <p className="text-sm font-medium font-sans">TOEFL ITP</p>
-              <p className="text-xs text-[var(--color-muted)]">Score 577 &mdash; Reading 65 (C1), Listening 62 (C1)</p>
+              <p className="text-xs text-[var(--color-muted)]">Score 577 - Reading 65 (C1), Listening 62 (C1)</p>
             </div>
             <span className="font-mono text-xs text-[var(--color-muted-2)] shrink-0">2026</span>
           </div>
